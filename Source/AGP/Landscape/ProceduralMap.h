@@ -33,6 +33,15 @@ protected:
 	TArray<AProceduralWall*> Walls;
 
 	UPROPERTY(EditAnywhere)
+	int Iterations = 3;
+	UPROPERTY(EditAnywhere)
+	int IterationsEachWall = 10;
+	UPROPERTY(EditAnywhere)
+	int WalkLength = 10;
+	UPROPERTY(EditAnywhere)
+	bool StartRandomlyEachIteration = true;
+
+	UPROPERTY(EditAnywhere)
 	bool bShouldGenerate;
 	UPROPERTY(EditAnywhere)
 	int32 Width;
@@ -48,11 +57,13 @@ protected:
 
 	void CreateSimplePlane();
 	void ClearMap();
-	void GenerateLandScape();
+	void GenerateWalls();
 
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void RunProceduralGeneration(FVector2D StartPos);
+	TSet<FVector2D> RunRandomWalk(FVector2D StartPos);
 };

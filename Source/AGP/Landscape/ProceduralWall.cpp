@@ -34,11 +34,12 @@ void AProceduralWall::GenerateWall(int32 VertexSpacing)
 {
 	int32 OffSet = VertexSpacing / 2;
 	TArray<FVector> WallVertexLocations;
-	WallVertexLocations.Add(GetActorLocation() + FVector(-OffSet, OffSet, 0.0f));
-	WallVertexLocations.Add(GetActorLocation() + FVector(-OffSet, -OffSet, 0.0f));
-	WallVertexLocations.Add(GetActorLocation() + FVector(OffSet, -OffSet, 0.0f));
-	WallVertexLocations.Add(GetActorLocation() + FVector(OffSet, OffSet, 0.0f));
-
+	
+	WallVertexLocations.Add(FVector(-OffSet, OffSet, 0.0f));
+	WallVertexLocations.Add(FVector(-OffSet, -OffSet, 0.0f));
+	WallVertexLocations.Add(FVector(OffSet, -OffSet, 0.0f));
+	WallVertexLocations.Add( FVector(OffSet, OffSet, 0.0f));
+	
 	for (int i = 0; i < WallVertexLocations.Num(); i++)
 	{
 		int nextIndex = i+1;
@@ -58,7 +59,7 @@ void AProceduralWall::GenerateWall(int32 VertexSpacing)
 		Triangles.Add(i*4 +2);
 		Triangles.Add(i*4 +3);
 
-		UVCoords.Add(FVector2D(i+0.0f, i+0.0f));
+		UVCoords.Add(FVector2D(i, i+0.0f));
 		UVCoords.Add(FVector2D(i+1.0f, i+0.0f));
 		UVCoords.Add(FVector2D(i+0.0f, i+1.0f));
 		UVCoords.Add(FVector2D(i+1.0f, i+1.0f));
@@ -74,6 +75,7 @@ void AProceduralWall::GenerateWall(int32 VertexSpacing)
 
 void AProceduralWall::GenerateRoof(TArray<FVector> WallVertexLocations)
 {
+	
 	Vertices.Add(WallVertexLocations[0] + FVector(0.0f, 0.0f, WallHeight));
 	Vertices.Add(WallVertexLocations[1] + FVector(0.0f, 0.0f, WallHeight));
 	Vertices.Add(WallVertexLocations[3] + FVector(0.0f, 0.0f, WallHeight));

@@ -4,6 +4,7 @@
 #include "ProceduralMap.h"
 
 #include "EngineUtils.h"
+#include "ProceduralGenerationAlgorithm.h"
 #include "ProceduralWall.h"
 #include "AGP/AGPGameInstance.h"
 
@@ -70,19 +71,31 @@ void AProceduralMap::ClearMap()
 	}
 }
 
-void AProceduralMap::GenerateLandScape()
+void AProceduralMap::GenerateWalls()
 {
-	for (int i = 0; i < Width; i++)
+	TSet<FVector2D> Set;
+	Set.Empty();
+	for (int i = 0; i < Iterations; i++)
 	{
-		for (int j = 0; j < Height; j++)
+		FVector2D StartPos = FVector2D(FMath::RandRange(0, Width - 1), FMath::RandRange(0, Height - 1));
+		UE_LOG(LogTemp, Warning, TEXT("StartPos: %s"), *StartPos.ToString());
+		Set = RunRandomWalk(StartPos);
+	
+		for (auto& Element : Set)
 		{
-			FVector VertexLocation = FVector(i * VertexSpacing, j * VertexSpacing, 0.0f);
-			DrawDebugSphere(GetWorld(), VertexLocation, 100.0f, 8, FColor::Blue, true, -1);
+			FVector SpawnPos = FVector(Element.X * VertexSpacing, Element.Y * VertexSpacing, 0);
+			DrawDebugSphere(GetWorld(), SpawnPos, 100, 8, FColor::Blue, true, -1);
 			
+			AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+			Wall->GenerateWall(VertexSpacing);
 		}
+	
+		Set.Empty();
 	}
-	AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), FVector(0.0, 0.0, 0.0f), FRotator::ZeroRotator);
-	Wall->GenerateWall(VertexSpacing);
+
+	// FVector SpawnPos = FVector(1 * VertexSpacing, 1 * VertexSpacing, 0);
+	// AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+	// Wall->GenerateWall(VertexSpacing);
 }
 
 // Called every frame
@@ -95,8 +108,33 @@ void AProceduralMap::Tick(float DeltaTime)
 		bShouldGenerate = false;
 		ClearMap();
 		CreateSimplePlane();
-		GenerateLandScape();
-		// GenerateWall(FVector(0.0f, 0.0f, 0.0f));
+		GenerateWalls();
 	}
+}
+
+void AProceduralMap::RunProceduralGeneration(FVector2D StartPos)
+{
+	TSet<FVector2D> FloorPos = RunRandomWalk(StartPos);
+	for (auto& Element : FloorPos)
+	{
+		
+	}
+}
+
+TSet<FVector2D> AProceduralMap::RunRandomWalk(FVector2D StartPos)
+{
+	FVector2D CurrentPos = StartPos;
+	TSet<FVector2D> FloorPos;
+	for (int i = 0; i < IterationsEachWall; i++)
+	{
+		TSet<FVector2D> Path = GetWorld()->GetSubsystem<UProceduralGenerationAlgorithm>()->SimpleRandomWalk(CurrentPos, WalkLength);
+		FloorPos = FloorPos.Union(Path);
+		if (StartRandomlyEachIteration)
+		{
+			CurrentPos = MyUtilities::ElementAt(FloorPos, FMath::RandRange(0, FloorPos.Num() - 1));
+		}
+	}
+
+	return FloorPos;
 }
 
