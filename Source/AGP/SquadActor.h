@@ -24,12 +24,16 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* LocationComponent;
+	UPROPERTY()
+	UPathfindingSubsystem* PathfindingSubsystem;
 
 	UPROPERTY(EditAnywhere)
 	int squadId;
 	UPROPERTY(VisibleAnywhere)
 	int squadSize;
 	float squadHealth;
+
+	TArray<FVector> squadPath;
 	
 	std::vector<AEnemyCharacter*> members;
 
@@ -37,7 +41,7 @@ protected:
 
 	void SquadRetreat();
 
-	void SquadInvestigate();
+	void SquadPatrol();
 
 	void SquadFlank();
 

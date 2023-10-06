@@ -23,7 +23,7 @@ enum class EEnemyState : uint8
 	Patrol,
 	Engage,
 	Evade,
-	Investigate
+	ReceivingOrders
 };
 
 /**
@@ -38,6 +38,9 @@ class AGP_API AEnemyCharacter : public ABaseCharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
+
+	void ReceiveOrders(TArray<FVector> orders);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,8 +67,8 @@ protected:
 
 	//Beginning of "Squad-Based" logic.
 	//Logic that will control the enemies in Investigation state.
-	void TickInvestigate();
-
+	void TickAwaitingOrders();
+	
 	/**
 	 * A function bound to the UPawnSensingComponent's OnSeePawn event. This will set the SensedCharacter variable
 	 * if the pawn that was sensed was of type APlayerCharacter.
@@ -110,13 +113,15 @@ protected:
 	 * found in the tick function of this enemy character.
 	 */
 	UPROPERTY(EditAnywhere)
-	EEnemyState CurrentState = EEnemyState::Patrol;
+	EEnemyState CurrentState = EEnemyState::ReceivingOrders;
 
 	/**
 	 * Some arbitrary error value for determining how close is close enough before moving onto the next step in the path.
 	 */
 	UPROPERTY(EditAnywhere)
 	float PathfindingError = 150.0f; // 150 cm from target by default.
+
+	
 
 public:	
 

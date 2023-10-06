@@ -4,6 +4,7 @@
 #include "SquadActor.h"
 
 #include "AGPGameInstance.h"
+#include "Pathfinding/PathfindingSubsystem.h"
 
 // Sets default values
 ASquadActor::ASquadActor()
@@ -21,6 +22,14 @@ void ASquadActor::BeginPlay()
 {
 	Super::BeginPlay();
 	squadSize = FMath::RandRange(2, 3);
+	PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
+	if (PathfindingSubsystem)
+	{
+		squadPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+	} else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
+	}
 	for (int i = 0; i < squadSize; i++)
 	{
 		if (const UAGPGameInstance* GameInstance = GetWorld()->GetGameInstance<UAGPGameInstance>())
@@ -32,7 +41,8 @@ void ASquadActor::BeginPlay()
 			UE_LOG(LogTemp, Display, TEXT("Spawning Squad Member...")); 
 		}
 	}
-	
+
+	SquadPatrol();
 }
 
 void ASquadActor::SquadRegroup()
@@ -43,8 +53,17 @@ void ASquadActor::SquadRetreat()
 {
 }
 
-void ASquadActor::SquadInvestigate()
+void ASquadActor::SquadPatrol()
 {
+	if (squadPath.IsEmpty())
+	{
+		squadPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+	}
+
+	for (AEnemyCharacter* squaddie : members)
+	{
+		squaddie->ReceiveOrders(squadPath);
+	}
 }
 
 void ASquadActor::SquadFlank()

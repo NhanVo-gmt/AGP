@@ -17,6 +17,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("Pawn Sensing Component");
 }
 
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
@@ -94,9 +95,17 @@ void AEnemyCharacter::TickEvade()
 	MoveAlongPath();
 }
 
-void AEnemyCharacter::TickInvestigate()
+void AEnemyCharacter::TickAwaitingOrders()
 {
+	MoveAlongPath();
 }
+
+void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
+{
+	CurrentPath = orders;
+}
+
+
 
 void AEnemyCharacter::OnSensedPawn(APawn* SensedActor)
 {
@@ -166,7 +175,12 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			CurrentState = EEnemyState::Patrol;
 		}
 		break;
+	case EEnemyState::ReceivingOrders:
+		TickAwaitingOrders();
+		break;
 	}
+	
+		
 }
 
 // Called to bind functionality to input
