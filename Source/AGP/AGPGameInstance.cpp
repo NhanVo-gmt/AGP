@@ -8,4 +8,9 @@ UClass* UAGPGameInstance::GetWeaponPickupClass() const
 	return WeaponPickupClass.Get();
 }
 
+UClass* UAGPGameInstance::GetEnemyCharacterClass() const
+{
+	return EnemyCharacterClass.Get();
+}
+
 

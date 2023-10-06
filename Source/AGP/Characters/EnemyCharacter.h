@@ -22,12 +22,14 @@ enum class EEnemyState : uint8
 {
 	Patrol,
 	Engage,
-	Evade
+	Evade,
+	Investigate
 };
 
 /**
  * A class representing the logic for an AI controlled enemy character. 
  */
+
 UCLASS()
 class AGP_API AEnemyCharacter : public ABaseCharacter
 {
@@ -58,6 +60,11 @@ protected:
 	 * Logic that controls the enemy character when in the Evade state.
 	 */
 	void TickEvade();
+
+
+	//Beginning of "Squad-Based" logic.
+	//Logic that will control the enemies in Investigation state.
+	void TickInvestigate();
 
 	/**
 	 * A function bound to the UPawnSensingComponent's OnSeePawn event. This will set the SensedCharacter variable

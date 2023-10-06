@@ -93,6 +93,10 @@ void AEnemyCharacter::TickEvade()
 	MoveAlongPath();
 }
 
+void AEnemyCharacter::TickInvestigate()
+{
+}
+
 void AEnemyCharacter::OnSensedPawn(APawn* SensedActor)
 {
 	if (APlayerCharacter* Player = Cast<APlayerCharacter>(SensedActor))
