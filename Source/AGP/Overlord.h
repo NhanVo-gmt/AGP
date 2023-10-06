@@ -5,9 +5,13 @@
 #include <vector>
 
 #include "CoreMinimal.h"
-#include "SquadComponent.h"
+#include "SquadActor.h"
 #include "Characters/EnemyCharacter.h"
+#include "PickupManagerSubsystem.h"
+#include "AGPGameInstance.h"
+#include "Pathfinding/PathfindingSubsystem.h"
 #include "GameFramework/Actor.h"
+#include "Pathfinding/NavigationNode.h"
 #include "Overlord.generated.h"
 
 
@@ -24,8 +28,20 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere)
+	int allowedSquads = 1;
+	std::vector<ASquadActor*> activeSquads;
+	FVector spawnLocation;
+	UPROPERTY(VisibleAnywhere)
+	FVector playerLocation;
 
-	std::vector<USquadComponent> activeSquads;
+	UPROPERTY()
+	APlayerCharacter* PlayerCharacter = nullptr;
+	
+	void FindSpawnLocation();
+	void SpawnEnemySquad();
+	
+
 
 	
 public:	

@@ -13,4 +13,9 @@ UClass* UAGPGameInstance::GetEnemyCharacterClass() const
 	return EnemyCharacterClass.Get();
 }
 
+UClass* UAGPGameInstance::GetSquadActorClass() const
+{
+	return SquadActorClass.Get();
+}
+
 

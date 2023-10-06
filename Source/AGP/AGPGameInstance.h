@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SquadActor.h"
 #include "Characters/EnemyCharacter.h"
 #include "Engine/GameInstance.h"
 #include "Pickups/WeaponPickup.h"
@@ -21,9 +22,12 @@ protected:
 	TSubclassOf<AWeaponPickup> WeaponPickupClass;
 	UPROPERTY(EditDefaultsOnly, Category="Enemy Classes")
 	TSubclassOf<AEnemyCharacter> EnemyCharacterClass;
+	UPROPERTY(EditDefaultsOnly, Category="Squad Classes")
+	TSubclassOf<ASquadActor> SquadActorClass;
 	
 public:
 	UClass* GetWeaponPickupClass() const;
 	UClass* GetEnemyCharacterClass() const;
+	UClass* GetSquadActorClass() const;
 	
 };

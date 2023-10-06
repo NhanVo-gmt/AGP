@@ -21,6 +21,7 @@ AEnemyCharacter::AEnemyCharacter()
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Display, TEXT("Spawned Squad Member."))
 
 	PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
 	if (PathfindingSubsystem)

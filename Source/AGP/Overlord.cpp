@@ -3,6 +3,8 @@
 
 #include "Overlord.h"
 
+#include "EngineUtils.h"
+
 // Sets default values
 AOverlord::AOverlord()
 {
@@ -16,12 +18,47 @@ void AOverlord::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
+	for (TActorIterator<APlayerCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		PlayerCharacter = Cast<APlayerCharacter>(*ActorItr);
+	}
+}
+
+
+void AOverlord::FindSpawnLocation()
+{
+	spawnLocation = GetWorld()->GetSubsystem<UPathfindingSubsystem>()->FindFurthestNode(playerLocation)->GetActorLocation();
+
+}
+
+void AOverlord::SpawnEnemySquad()
+{
+	for (int i = 0; i < allowedSquads; i++)
+	{
+		FindSpawnLocation();
+		if (const UAGPGameInstance* GameInstance = GetWorld()->GetGameInstance<UAGPGameInstance>())
+		{
+			ASquadActor* Squad = GetWorld()->SpawnActor<ASquadActor>(GameInstance->GetSquadActorClass(), spawnLocation, FRotator::ZeroRotator);
+			activeSquads.push_back(Squad);
+			UE_LOG(LogTemp, Display, TEXT("Spawning Squad...")); 
+		}
+	}
 }
 
 // Called every frame
 void AOverlord::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	playerLocation = PlayerCharacter->GetActorLocation();
+	
+	//UE_LOG(LogTemp, Display, TEXT("The float value is: %d"), int(activeSquads.size())); 
+
+	if (activeSquads.size() < allowedSquads)
+	{
+		SpawnEnemySquad();
+	}
+	
 
 }
 

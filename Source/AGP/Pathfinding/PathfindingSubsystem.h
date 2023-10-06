@@ -51,6 +51,10 @@ public:
 	void PlaceProceduralNodes(const TArray<FVector>& LandscapeVertexData, int32 MapWidth, int32 MapHeight);
 	TArray<FVector> GetWaypointPositions();
 
+
+	//Moved here for prototyping's sake.
+	ANavigationNode* FindFurthestNode(const FVector& TargetLocation);
+
 protected:
 	
 	TArray<ANavigationNode*> Nodes;
@@ -64,7 +68,7 @@ private:
 	void RemoveAllNodes();
 	ANavigationNode* GetRandomNode();
 	ANavigationNode* FindNearestNode(const FVector& TargetLocation);
-	ANavigationNode* FindFurthestNode(const FVector& TargetLocation);
+	
 	TArray<FVector> GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode);
 	static TArray<FVector> ReconstructPath(const TMap<ANavigationNode*, ANavigationNode*>& CameFromMap, ANavigationNode* EndNode);
 	

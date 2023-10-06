@@ -2,37 +2,45 @@
 
 #pragma once
 
+#include <vector>
+
 #include "CoreMinimal.h"
+#include "Characters/EnemyCharacter.h"
 #include "GameFramework/Actor.h"
-#include "NavigationNode.generated.h"
+#include "SquadActor.generated.h"
 
 UCLASS()
-class AGP_API ANavigationNode : public AActor
+class AGP_API ASquadActor : public AActor
 {
 	GENERATED_BODY()
-
-	friend class UPathfindingSubsystem;
 	
 public:	
 	// Sets default values for this actor's properties
-	ANavigationNode();
-	virtual bool ShouldTickIfViewportsOnly() const override;
-	float GScore;
-	float HScore;
-	ANavigationNode* CameFrom;
-	float FScore() const
-	{
-		return GScore + HScore;
-	}
+	ASquadActor();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-	TArray<ANavigationNode*> ConnectedNodes;
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* LocationComponent;
+
+	UPROPERTY(EditAnywhere)
+	int squadId;
+	UPROPERTY(VisibleAnywhere)
+	int squadSize;
+	float squadHealth;
+	
+	std::vector<AEnemyCharacter*> members;
+
+	void SquadRegroup();
+
+	void SquadRetreat();
+
+	void SquadInvestigate();
+
+	void SquadFlank();
+
 
 public:	
 	// Called every frame

@@ -15,6 +15,7 @@ ANavigationNode::ANavigationNode()
 	
 }
 
+
 // Called when the game starts or when spawned
 void ANavigationNode::BeginPlay()
 {

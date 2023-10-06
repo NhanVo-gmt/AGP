@@ -228,7 +228,7 @@ TArray<FVector> UPathfindingSubsystem::GetPath(ANavigationNode* StartNode, ANavi
 		if (CurrentNode == EndNode)
 		{
 			// Then we have found the path so reconstruct it and get the positions of each of the nodes in the path.
-			UE_LOG(LogTemp, Display, TEXT("PATH FOUND"))
+			//UE_LOG(LogTemp, Display, TEXT("PATH FOUND"))
 			return ReconstructPath(CameFrom, EndNode);
 		}
 
