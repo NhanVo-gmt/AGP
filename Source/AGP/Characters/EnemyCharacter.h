@@ -41,6 +41,13 @@ public:
 
 	void ReceiveOrders(TArray<FVector> orders);
 
+	float ReturnHealth();
+
+	bool NeedOrders();
+
+	bool PlayerCheck();
+
+	void SquadBroken();
 
 protected:
 	// Called when the game starts or when spawned

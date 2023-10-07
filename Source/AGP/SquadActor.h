@@ -9,6 +9,14 @@
 #include "GameFramework/Actor.h"
 #include "SquadActor.generated.h"
 
+UENUM(BlueprintType)
+enum class ESquadState : uint8
+{
+	Patrol,
+	Engage,
+	
+};
+
 UCLASS()
 class AGP_API ASquadActor : public AActor
 {
@@ -44,6 +52,13 @@ protected:
 	void SquadPatrol();
 
 	void SquadFlank();
+
+	bool OrdersCheck();
+
+	bool PlayerCheck();
+
+	UPROPERTY(EditAnywhere)
+	ESquadState CurrentState = ESquadState::Patrol;
 
 
 public:	

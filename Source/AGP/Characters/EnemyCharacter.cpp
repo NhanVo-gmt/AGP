@@ -105,6 +105,34 @@ void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
 	CurrentPath = orders;
 }
 
+float AEnemyCharacter::ReturnHealth()
+{
+	return HealthComponent->GetCurrentHealth();
+}
+
+bool AEnemyCharacter::NeedOrders()
+{
+	if (CurrentPath.IsEmpty())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool AEnemyCharacter::PlayerCheck()
+{
+	if (SensedCharacter)
+	{
+		return true;
+	}
+		return false;
+	
+}
+
+void AEnemyCharacter::SquadBroken()
+{
+	CurrentState = EEnemyState::Evade;
+}
 
 
 void AEnemyCharacter::OnSensedPawn(APawn* SensedActor)
