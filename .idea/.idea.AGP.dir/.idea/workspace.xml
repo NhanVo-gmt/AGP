@@ -14,6 +14,8 @@
       <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Utilities/MyUtilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Utilities/MyUtilities.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +125,10 @@
       <workItem from="1696250438503" duration="1233000" />
       <workItem from="1696293907757" duration="1661000" />
       <workItem from="1696299148600" duration="10632000" />
-      <workItem from="1696313507032" duration="6999000" />
+      <workItem from="1696313507032" duration="7437000" />
+      <workItem from="1696382633408" duration="16777000" />
+      <workItem from="1696682676926" duration="3212000" />
+      <workItem from="1696724805233" duration="2318000" />
     </task>
     <servers />
   </component>

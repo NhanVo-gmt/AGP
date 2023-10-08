@@ -7,6 +7,9 @@
 #include "ProceduralGenerationAlgorithm.h"
 #include "ProceduralWall.h"
 #include "AGP/AGPGameInstance.h"
+#include "AGP/Characters/EnemyCharacter.h"
+#include "AGP/SpawnSystem/WorldSpawnSubsystem.h"
+#include "Core/Tests/Containers/TestUtils.h"
 
 // Sets default values
 AProceduralMap::AProceduralMap()
@@ -22,6 +25,38 @@ bool AProceduralMap::ShouldTickIfViewportsOnly() const
 {
 	return true;
 }
+
+bool AProceduralMap::IsValid(FVector2D Pos)
+{
+	return Pos.X > 0 && Pos.X <= Width - 1 && Pos.Y > 0 && Pos.Y <= Height - 1;
+}
+
+bool AProceduralMap::IsValid(FVector Pos)
+{
+	return Pos.X > 0 && Pos.X <= Width - 1 && Pos.Y > 0 && Pos.Y <= Height - 1;
+}
+
+bool AProceduralMap::IsInWall(FVector2D SpawnPos)
+{
+	if (Walls.Num() <= 0) return true;
+	
+	for (int i = 0; i < Width; i++)
+	{
+		for (int j = 0; j < Height; j++)
+		{
+			if (!Walls[i][j]) continue;
+
+			
+			if (FVector2D::DistSquared(FVector2D(i, j), SpawnPos) < 1)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 
 // Called when the game starts or when spawned
 void AProceduralMap::BeginPlay()
@@ -63,39 +98,112 @@ void AProceduralMap::ClearMap()
 	ProceduralMeshComponent->ClearMeshSection(0);
 	
 	FlushPersistentDebugLines(GetWorld());
-	Walls.Empty();
+
+	DestroyWalls();
+}
+
+void AProceduralMap::GenerateInsideWalls()
+{
+	TSet<FVector2D> Set;
+	Set.Empty();
+
+	for (int i = 0; i < Width; i++)
+	{
+		TArray<bool> Temp;
+		Temp.Init(false, Height);
+		Walls.Add(Temp);
+	}
 	
+	for (int i = 0; i < Iterations; i++)
+	{
+		FVector2D StartPos = FVector2D(FMath::RandRange(0, Width - 1), FMath::RandRange(0, Height - 1));
+
+		Set = RunRandomWalk(StartPos);
+	
+		for (auto& Element : Set)
+		{
+			if (IsValid(Element))
+			{
+				FVector SpawnPos = FVector(Element.X * VertexSpacing, Element.Y * VertexSpacing, 0);
+				
+				AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+				Wall->GenerateWall(VertexSpacing, 400);
+				Walls[Element.X][Element.Y] = true;
+			}
+		}
+	
+		Set.Empty();
+	}
+}
+
+void AProceduralMap::GenerateOutsideWalls()
+{
+	for (int i = 0; i < Width; i++)
+	{
+		FVector SpawnPos = FVector(i * VertexSpacing, -VertexSpacing, 0.0);
+		AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		Wall->GenerateWall(VertexSpacing, 1000);
+
+		SpawnPos = FVector(i * VertexSpacing, (Height) * VertexSpacing - VertexSpacing / 2, 0.0);
+		Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		Wall->GenerateWall(VertexSpacing, 1000);
+	}
+
+	for (int i = 0; i < Height; i++)
+	{
+		FVector SpawnPos = FVector(-VertexSpacing, i * VertexSpacing, 0.0);
+		AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		Wall->GenerateWall(VertexSpacing, 1000);
+
+		SpawnPos = FVector(Width * VertexSpacing - VertexSpacing / 2, i * VertexSpacing, 0.0);
+		Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		Wall->GenerateWall(VertexSpacing, 1000);
+	}
+}
+
+void AProceduralMap::DestroyWalls()
+{
+	Walls.Empty();
 	for (TActorIterator<AProceduralWall> It(GetWorld()); It; ++It)
 	{
 		It->DestroyWall();
 	}
 }
 
-void AProceduralMap::GenerateWalls()
+void AProceduralMap::GeneratePickups()
 {
-	TSet<FVector2D> Set;
-	Set.Empty();
-	for (int i = 0; i < Iterations; i++)
+	TArray<FVector2D> SpawnPoints = GetWorld()->GetSubsystem<UWorldSpawnSubsystem>()->GeneratePoints(Width, Height, 1, NumberBeforeRejection);
+	UE_LOG(LogTemp, Warning, TEXT("SpawnPoints: %d"), SpawnPoints.Num());
+
+	int MaxPickupSpawned = MaxPickup;
+	Test::Shuffle(SpawnPoints);
+	for (int i = 0; i < SpawnPoints.Num(); i++)
 	{
-		FVector2D StartPos = FVector2D(FMath::RandRange(0, Width - 1), FMath::RandRange(0, Height - 1));
-		UE_LOG(LogTemp, Warning, TEXT("StartPos: %s"), *StartPos.ToString());
-		Set = RunRandomWalk(StartPos);
-	
-		for (auto& Element : Set)
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPoints: %s"), *SpawnPoints[i].ToString());
+
+		if (IsInWall(SpawnPoints[i]))
 		{
-			FVector SpawnPos = FVector(Element.X * VertexSpacing, Element.Y * VertexSpacing, 0);
-			DrawDebugSphere(GetWorld(), SpawnPos, 100, 8, FColor::Blue, true, -1);
-			
-			AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
-			Wall->GenerateWall(VertexSpacing);
+			continue;
 		}
-	
-		Set.Empty();
+		
+		FVector SpawnPos = FVector(SpawnPoints[i].X * VertexSpacing, SpawnPoints[i].Y * VertexSpacing, 100);
+		AWeaponPickup* WeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(AWeaponPickup::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		MaxPickupSpawned--;
+		if (MaxPickupSpawned <= 0)
+		{
+			break;
+		}
 	}
 
-	// FVector SpawnPos = FVector(1 * VertexSpacing, 1 * VertexSpacing, 0);
-	// AProceduralWall* Wall = GetWorld()->SpawnActor<AProceduralWall>(AProceduralWall::StaticClass(), SpawnPos, FRotator::ZeroRotator);
-	// Wall->GenerateWall(VertexSpacing);
+	
+}
+
+void AProceduralMap::DestroyPickups()
+{
+	for (TActorIterator<AWeaponPickup> It(GetWorld()); It; ++It)
+	{
+		GetWorld()->DestroyActor(*It);
+	}
 }
 
 // Called every frame
@@ -103,12 +211,20 @@ void AProceduralMap::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bShouldGenerate)
+	if (bGenerateMap)
 	{
-		bShouldGenerate = false;
+		bGenerateMap = false;
 		ClearMap();
 		CreateSimplePlane();
-		GenerateWalls();
+		GenerateOutsideWalls();
+		GenerateInsideWalls();
+	}
+
+	if (bGeneratePickup)
+	{
+		bGeneratePickup = false;
+		DestroyPickups();
+		GeneratePickups();
 	}
 }
 

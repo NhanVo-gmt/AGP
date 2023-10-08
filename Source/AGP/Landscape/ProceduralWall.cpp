@@ -30,7 +30,7 @@ void AProceduralWall::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AProceduralWall::GenerateWall(int32 VertexSpacing)
+void AProceduralWall::GenerateWall(int32 VertexSpacing, int32 WallHeight)
 {
 	int32 OffSet = VertexSpacing / 2;
 	TArray<FVector> WallVertexLocations;
@@ -65,7 +65,7 @@ void AProceduralWall::GenerateWall(int32 VertexSpacing)
 		UVCoords.Add(FVector2D(i+1.0f, i+1.0f));
 	}
 
-	GenerateRoof(WallVertexLocations);
+	GenerateRoof(WallVertexLocations, WallHeight);
 
 	if (WallProceduralMeshComponents)
 	{
@@ -73,7 +73,7 @@ void AProceduralWall::GenerateWall(int32 VertexSpacing)
 	}
 }
 
-void AProceduralWall::GenerateRoof(TArray<FVector> WallVertexLocations)
+void AProceduralWall::GenerateRoof(TArray<FVector> WallVertexLocations, int32 WallHeight)
 {
 	
 	Vertices.Add(WallVertexLocations[0] + FVector(0.0f, 0.0f, WallHeight));
