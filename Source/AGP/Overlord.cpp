@@ -25,13 +25,14 @@ void AOverlord::BeginPlay()
 	}
 }
 
-
+//Finds somewhere far to spawn the player.
 void AOverlord::FindSpawnLocation()
 {
 	spawnLocation = GetWorld()->GetSubsystem<UPathfindingSubsystem>()->FindFurthestNode(playerLocation)->GetActorLocation();
 
 }
 
+//Spawns squad according to the Allowed Squads variable.
 void AOverlord::SpawnEnemySquad()
 {
 	for (int i = 0; i < allowedSquads; i++)

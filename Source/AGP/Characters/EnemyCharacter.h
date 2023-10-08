@@ -40,6 +40,9 @@ public:
 	AEnemyCharacter();
 
 	void ReceiveOrders(TArray<FVector> orders);
+	
+
+	void ReceiveOrders(EEnemyState state);
 
 	float ReturnHealth();
 
@@ -48,6 +51,12 @@ public:
 	bool PlayerCheck();
 
 	void SquadBroken();
+
+	FVector playerLocation;
+
+	FVector PlayerLocation();
+
+	void AdjustPathfindingError();
 
 protected:
 	// Called when the game starts or when spawned
@@ -126,7 +135,7 @@ protected:
 	 * Some arbitrary error value for determining how close is close enough before moving onto the next step in the path.
 	 */
 	UPROPERTY(EditAnywhere)
-	float PathfindingError = 150.0f; // 150 cm from target by default.
+	float PathfindingError = 100.0f; // 150 cm from target by default.
 
 	
 

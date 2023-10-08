@@ -14,6 +14,7 @@ enum class ESquadState : uint8
 {
 	Patrol,
 	Engage,
+	Broken
 	
 };
 
@@ -39,9 +40,11 @@ protected:
 	int squadId;
 	UPROPERTY(VisibleAnywhere)
 	int squadSize;
+	float maxHealth;
 	float squadHealth;
-
+	
 	TArray<FVector> squadPath;
+	FVector playerLocation;
 	
 	std::vector<AEnemyCharacter*> members;
 
@@ -51,11 +54,14 @@ protected:
 
 	void SquadPatrol();
 
-	void SquadFlank();
+	void SquadScatter();
 
 	bool OrdersCheck();
 
 	bool PlayerCheck();
+
+	void ClearOrders();
+	
 
 	UPROPERTY(EditAnywhere)
 	ESquadState CurrentState = ESquadState::Patrol;

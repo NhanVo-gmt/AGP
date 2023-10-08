@@ -18,6 +18,17 @@ AEnemyCharacter::AEnemyCharacter()
 }
 
 
+FVector AEnemyCharacter::PlayerLocation()
+{
+	
+	return playerLocation;
+}
+
+void AEnemyCharacter::AdjustPathfindingError()
+{
+	PathfindingError += 30;
+}
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
@@ -105,6 +116,11 @@ void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
 	CurrentPath = orders;
 }
 
+void AEnemyCharacter::ReceiveOrders(EEnemyState state)
+{
+	CurrentState = state;
+}
+
 float AEnemyCharacter::ReturnHealth()
 {
 	return HealthComponent->GetCurrentHealth();
@@ -140,6 +156,7 @@ void AEnemyCharacter::OnSensedPawn(APawn* SensedActor)
 	if (APlayerCharacter* Player = Cast<APlayerCharacter>(SensedActor))
 	{
 		SensedCharacter = Player;
+		playerLocation = SensedCharacter->GetActorLocation();
 		UE_LOG(LogTemp, Display, TEXT("Sensed Player"))
 	}
 }
@@ -178,7 +195,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			{
 				CurrentState = EEnemyState::Evade;
 			}
-			CurrentPath.Empty();
+			//CurrentPath.Empty();
 		}
 		break;
 	case EEnemyState::Engage:

@@ -32,6 +32,8 @@ protected:
 	int allowedSquads = 1;
 	std::vector<ASquadActor*> activeSquads;
 	FVector spawnLocation;
+
+	//Tracking the player for future tactics.
 	UPROPERTY(VisibleAnywhere)
 	FVector playerLocation;
 
