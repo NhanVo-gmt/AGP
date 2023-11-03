@@ -86,7 +86,7 @@ void UPathfindingSubsystem::PlaceProceduralNodes(const TArray<FVector>& Landscap
 }
 
 void UPathfindingSubsystem::PlaceProceduralNodesWithWalls(const TArray<FVector>& LandscapeVertexData,
-	int32 MapWidth, int32 MapHeight, const TArray<TArray<bool>>& Walls)
+	int32 MapWidth, int32 MapHeight, int32 VertexSpacing, const TArray<TArray<bool>>& Walls)
 {
 	// Need to destroy all of the current nodes in the world.
 	RemoveAllNodes();
@@ -99,7 +99,8 @@ void UPathfindingSubsystem::PlaceProceduralNodesWithWalls(const TArray<FVector>&
 			// Spawn the node in
 			if (ANavigationNode* Node = GetWorld()->SpawnActor<ANavigationNode>())
 			{
-				Node->SetActorLocation(LandscapeVertexData[Y * MapWidth + X]);
+				FVector SpawnPos = FVector(LandscapeVertexData[Y * MapWidth + X].X * VertexSpacing, LandscapeVertexData[Y * MapWidth + X].Y * VertexSpacing, 10);
+				Node->SetActorLocation(SpawnPos);
 				ProcedurallyPlacedNodes.Add(Node);
 				ValidNodes.Add(!IsInWall(Walls, LandscapeVertexData[Y * MapWidth + X]));
 				
@@ -190,7 +191,7 @@ bool UPathfindingSubsystem::IsInWall(const TArray<TArray<bool>>& Walls, FVector 
 		for (int j = 0; j < Walls[0].Num(); j++)
 		{
 			if (!Walls[i][j]) continue;
-			
+			UE_LOG(LogTemp, Warning, TEXT("%d"), Walls.Num());
 			if (FVector::DistSquared(FVector(i, j, SpawnPos.Z), SpawnPos) < 1)
 			{
 				return true;

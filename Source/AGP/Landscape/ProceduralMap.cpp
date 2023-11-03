@@ -218,14 +218,14 @@ void AProceduralMap::GenerateNodes()
 	{
 		for (int32 X = 0; X < Width; X++)
 		{
-			FVector2D VertexLocation = FVector2D(X * VertexSpacing, Y * VertexSpacing);
+			FVector2D VertexLocation = FVector2D(X, Y);
 			SpawnPoints.Add(FVector(VertexLocation.X, VertexLocation.Y, 0.0f));
 		}
 	}
 
 	if (UPathfindingSubsystem* PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>())
 	{
-		PathfindingSubsystem->PlaceProceduralNodesWithWalls(SpawnPoints, Width, Height, Walls);
+		PathfindingSubsystem->PlaceProceduralNodesWithWalls(SpawnPoints, Width, Height, VertexSpacing, Walls);
 	}
 }
 
