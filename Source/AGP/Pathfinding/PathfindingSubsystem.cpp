@@ -191,7 +191,6 @@ bool UPathfindingSubsystem::IsInWall(const TArray<TArray<bool>>& Walls, FVector 
 		for (int j = 0; j < Walls[0].Num(); j++)
 		{
 			if (!Walls[i][j]) continue;
-			UE_LOG(LogTemp, Warning, TEXT("%d"), Walls.Num());
 			if (FVector::DistSquared(FVector(i, j, SpawnPos.Z), SpawnPos) < 1)
 			{
 				return true;
