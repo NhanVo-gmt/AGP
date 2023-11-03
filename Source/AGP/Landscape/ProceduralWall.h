@@ -27,8 +27,6 @@ protected:
 	TArray<int32> Triangles;
 	UPROPERTY()
 	TArray<FVector2D> UVCoords;
-	UPROPERTY(EditAnywhere)
-	int32 WallHeight = 1000;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,6 +37,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void GenerateWall(int32 VertexSpacing);
-	void GenerateRoof(TArray<FVector> WallVertexLocations);
+	void GenerateWall(int32 VertexSpacing, int32 WallHeight);
+	void GenerateRoof(TArray<FVector> WallVertexLocations, int32 WallHeight);
 };

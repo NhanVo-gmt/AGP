@@ -18,7 +18,7 @@ void UPickupManagerSubsystem::SpawnWeaponPickup()
 {
 	if (PossibleSpawnLocations.IsEmpty())
 	{
-		//UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup"));
+		UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup"));
 		return;
 	}
 
@@ -28,7 +28,7 @@ void UPickupManagerSubsystem::SpawnWeaponPickup()
 		SpawnPosition.Z += 50.0f;
 		AWeaponPickup* Pickup = GetWorld()->SpawnActor<AWeaponPickup>(GameInstance->GetWeaponPickupClass(), SpawnPosition, FRotator::ZeroRotator);
 
-		//UE_LOG(LogTemp, Display, TEXT("Weapon pickup spawned")); 
+		UE_LOG(LogTemp, Display, TEXT("Weapon pickup spawned")); 
 	}
 }
 

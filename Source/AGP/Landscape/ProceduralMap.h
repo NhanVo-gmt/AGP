@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ProceduralMeshComponent.h"
 #include "ProceduralWall.h"
+#include "AGP/Pickups/WeaponPickup.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralMap.generated.h"
 
@@ -18,6 +19,9 @@ public:
 	AProceduralMap();
 
 	virtual bool ShouldTickIfViewportsOnly() const override;
+	bool IsValid(FVector2D Pos);
+	bool IsValid(FVector Pos);
+	bool IsInWall(FVector2D SpawnPos);
 	
 protected:
 
@@ -29,8 +33,8 @@ protected:
 	TArray<int32> Triangles;
 	UPROPERTY()
 	TArray<FVector2D> UVCoords;
-	UPROPERTY()
-	TArray<AProceduralWall*> Walls;
+
+	TArray<TArray<bool>> Walls;
 
 	UPROPERTY(EditAnywhere)
 	int Iterations = 3;
@@ -42,14 +46,23 @@ protected:
 	bool StartRandomlyEachIteration = true;
 
 	UPROPERTY(EditAnywhere)
-	bool bShouldGenerate;
+	int NumberBeforeRejection = 3;
+	UPROPERTY(EditAnywhere)
+	int MaxPickup = 3;
+
+	UPROPERTY(EditAnywhere)
+	bool bGenerateMap;
+	UPROPERTY(EditAnywhere)
+	bool bGeneratePickup;
 	UPROPERTY(EditAnywhere)
 	int32 Width;
 	UPROPERTY(EditAnywhere)
 	int32 Height;
 	UPROPERTY(EditAnywhere)
 	int32 VertexSpacing;
-	
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeaponPickup> WeaponPickupClass;
 	
 
 	// Called when the game starts or when spawned
@@ -57,8 +70,11 @@ protected:
 
 	void CreateSimplePlane();
 	void ClearMap();
-	void GenerateWalls();
-
+	void GenerateInsideWalls();
+	void GenerateOutsideWalls();
+	void DestroyWalls();
+	void GeneratePickups();
+	void DestroyPickups();
 
 public:	
 	// Called every frame

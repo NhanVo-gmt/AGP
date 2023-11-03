@@ -7,51 +7,43 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60d9c7bd-d9f6-49ec-bcc0-105a1f43a743" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralMap.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Landscape/ProceduralWall.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="68f7f188-9995-4325-a873-a81e3a4f284e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
-}</component>
-  <component name="ProjectId" id="2VbM9Fitz0yc0eCQxqJ4ipEKMQG" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2XdwYjseuVct6ZVe9QCzk4tjClV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;PCG&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\Dell\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\Dell\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\Dell\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\Dell\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Dell\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache",
+      "C:\\Users\\Dell\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="AGP" type="Uproject" factoryName="rider.uproject">
       <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/AGP.uproject" />
@@ -60,7 +52,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.2\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass3\Assignment3\AGP.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass3 &amp; 4\Assignment3 &amp; 4\AGP.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -68,7 +60,7 @@
       <configuration_3>
         <option name="CONFIGURATION" value="DebugGame" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3\Assignment3\Binaries\Win64\AGP-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3 &amp; 4\Assignment3 &amp; 4\Binaries\Win64\AGP-Win64-DebugGame.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -80,7 +72,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.2\Engine\Binaries\Win64\UnrealEditor.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass3\Assignment3\AGP.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass3 &amp; 4\Assignment3 &amp; 4\AGP.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -88,7 +80,7 @@
       <configuration_5>
         <option name="CONFIGURATION" value="Development" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3\Assignment3\Binaries\Win64\AGP.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3 &amp; 4\Assignment3 &amp; 4\Binaries\Win64\AGP.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -98,7 +90,7 @@
       <configuration_6>
         <option name="CONFIGURATION" value="Shipping" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3\Assignment3\Binaries\Win64\AGP-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass3 &amp; 4\Assignment3 &amp; 4\Binaries\Win64\AGP-Win64-Shipping.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -113,17 +105,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="60d9c7bd-d9f6-49ec-bcc0-105a1f43a743" name="Changes" comment="" />
-      <created>1695100174631</created>
+      <changelist id="68f7f188-9995-4325-a873-a81e3a4f284e" name="Changes" comment="" />
+      <created>1698972317940</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1695100174631</updated>
-      <workItem from="1695100177347" duration="11157000" />
-      <workItem from="1695130186883" duration="4840000" />
-      <workItem from="1696250438503" duration="1233000" />
-      <workItem from="1696293907757" duration="1661000" />
-      <workItem from="1696299148600" duration="10632000" />
-      <workItem from="1696313507032" duration="6999000" />
+      <updated>1698972317940</updated>
+      <workItem from="1698972319614" duration="748000" />
     </task>
     <servers />
   </component>
