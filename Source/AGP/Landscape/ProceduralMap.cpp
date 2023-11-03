@@ -173,7 +173,6 @@ void AProceduralMap::DestroyWalls()
 void AProceduralMap::GeneratePickups()
 {
 	TArray<FVector2D> SpawnPoints = GetWorld()->GetSubsystem<UWorldSpawnSubsystem>()->GeneratePoints(Width, Height, 1, NumberBeforeRejection);
-	UE_LOG(LogTemp, Warning, TEXT("SpawnPoints: %d"), SpawnPoints.Num());
 
 	int MaxPickupSpawned = MaxPickup;
 	Test::Shuffle(SpawnPoints);
@@ -187,7 +186,11 @@ void AProceduralMap::GeneratePickups()
 		}
 		
 		FVector SpawnPos = FVector(SpawnPoints[i].X * VertexSpacing, SpawnPoints[i].Y * VertexSpacing, 100);
-		AWeaponPickup* WeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(AWeaponPickup::StaticClass(), SpawnPos, FRotator::ZeroRotator);
+		if (const UAGPGameInstance* GameInstance = GetWorld()->GetGameInstance<UAGPGameInstance>())
+		{
+			UE_LOG(LogTemp, Display, TEXT("Weapon pickup spawned"));
+		}
+		AWeaponPickup* WeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(WeaponPickupClass, SpawnPos, FRotator::ZeroRotator);
 		MaxPickupSpawned--;
 		if (MaxPickupSpawned <= 0)
 		{

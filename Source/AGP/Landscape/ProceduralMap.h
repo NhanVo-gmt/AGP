@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ProceduralMeshComponent.h"
 #include "ProceduralWall.h"
+#include "AGP/Pickups/WeaponPickup.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralMap.generated.h"
 
@@ -59,7 +60,9 @@ protected:
 	int32 Height;
 	UPROPERTY(EditAnywhere)
 	int32 VertexSpacing;
-	
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeaponPickup> WeaponPickupClass;
 	
 
 	// Called when the game starts or when spawned
