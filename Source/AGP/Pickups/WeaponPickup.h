@@ -4,23 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "PickupBase.h"
-#include "AGP/WeaponComponent.h"
+#include "AGP/Characters/WeaponComponent.h"
 #include "WeaponPickup.generated.h"
 
 UENUM(BlueprintType)
-enum EWeaponRarity
+enum class EWeaponRarity : uint8
 {
 	Common,
 	Rare,
 	Master,
-	Legendary,
-};
-
-UENUM()
-enum EStatQuality
-{
-	Good,
-	Bad,
+	Legendary
 };
 
 /**
@@ -32,31 +25,25 @@ class AGP_API AWeaponPickup : public APickupBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EWeaponRarity> WeaponRarity = EWeaponRarity::Common;
 
+	UPROPERTY(BlueprintReadOnly, Replicated)
+	EWeaponRarity WeaponRarity = EWeaponRarity::Common;
+	UPROPERTY(Replicated)
 	FWeaponStats WeaponStats;
-	
-	void ShuffleAttributeTypes();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateWeaponPickupMaterial();
-	
+	virtual void BeginPlay() override;
 	virtual void OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& HitInfo) override;
 
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateWeaponPickupMaterial();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 private:
+
 	void GenerateWeaponPickup();
-
-	void GenerateStat();
-
-	void GenerateAccuracyStat(EStatQuality StatQuality);
-	void GenerateFireRateStat(EStatQuality StatQuality);
-	void GenerateBaseDamageStat(EStatQuality StatQuality);
-	void GenerateMagazineStat(EStatQuality StatQuality);
-	void GenerateReloadTimeStat(EStatQuality StatQuality);
-
+	EWeaponRarity WeaponRarityPicker();
+	TArray<bool> WeaponStatPicker(int32 NumOfGood, int32 NumOfStats);
 	
 };

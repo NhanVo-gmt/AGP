@@ -4,177 +4,115 @@
 #include "WeaponPickup.h"
 
 #include "../Characters/PlayerCharacter.h"
+#include "Net/UnrealNetwork.h"
 
-void AWeaponPickup::ShuffleAttributeTypes()
+void AWeaponPickup::BeginPlay()
 {
-	if (WeaponStats.Types.Num() > 0)
-	{
-		int32 LastIndex = WeaponStats.Types.Num() - 1;
-		for (int32 i = 0; i <= LastIndex; ++i)
-		{
-			int32 Index = FMath::RandRange(i, LastIndex);
-			if (i != Index)
-			{
-				WeaponStats.Types.Swap(i, Index);
-			}
-		}
-	}
-}
+	Super::BeginPlay();
 
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		GenerateWeaponPickup();
+	}
+	UpdateWeaponPickupMaterial();
+}
 
 void AWeaponPickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                     UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& HitInfo)
 {
 	//Super::OnPickupOverlap(OverlappedComponent, OtherActor, OtherComponent, OtherBodyIndex, bFromSweep, HitInfo);
-	UE_LOG(LogTemp, Display, TEXT("Overlap event occurred on WeaponPickup"))
+	// UE_LOG(LogTemp, Display, TEXT("Overlap event occurred on WeaponPickup"))
 
 	if (ABaseCharacter* Player = Cast<ABaseCharacter>(OtherActor))
 	{
+		Player->EquipWeapon(true, WeaponStats);
 
-		Player->EquipWeapon(WeaponStats);
-		Destroy();
-
+		// if (UPickupManagerSubsystem* PickupManagerSubsystem = GetWorld()->GetSubsystem<UPickupManagerSubsystem>())
+		// {
+		// 	PickupManagerSubsystem->OnWeaponPickup(GetActorLocation());
+		// } todo
 	}
 }
 
-void AWeaponPickup::BeginPlay()
+void AWeaponPickup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::BeginPlay();
-	GenerateWeaponPickup();
-	UpdateWeaponPickupMaterial();
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AWeaponPickup, WeaponRarity);
+	DOREPLIFETIME(AWeaponPickup, WeaponStats);
 }
 
 void AWeaponPickup::GenerateWeaponPickup()
 {
-	int Chance = FMath::RandRange(0, 100);
-	if (Chance < 5)
+	WeaponRarity = WeaponRarityPicker();
+	TArray<bool> GoodStats;
+	switch (WeaponRarity)
 	{
-		WeaponRarity = EWeaponRarity::Legendary;
-	}
-	else if (Chance < 20)
-	{
-		WeaponRarity = EWeaponRarity::Master;
-	}
-	else if (Chance < 50)
-	{
-		WeaponRarity = EWeaponRarity::Rare;
-	}
-	else
-	{
-		WeaponRarity = EWeaponRarity::Common;
+	case EWeaponRarity::Legendary:
+		GoodStats = WeaponStatPicker(4, 5);
+		break;
+	case EWeaponRarity::Master:
+		GoodStats = WeaponStatPicker(3, 5);
+		break;
+	case EWeaponRarity::Rare:
+		GoodStats = WeaponStatPicker(2, 5);
+		break;
+	default:
+		GoodStats = WeaponStatPicker(0, 5);
+		break;
 	}
 
-	GenerateStat();
+	WeaponStats.Accuracy = GoodStats[0] ? FMath::RandRange(0.98f, 1.0f) : FMath::RandRange(0.9f, 0.98f);
+	WeaponStats.FireRate = GoodStats[1] ? FMath::RandRange(0.05f, 0.2f) : FMath::RandRange(0.2f, 1.0f);
+	WeaponStats.BaseDamage = GoodStats[2] ? FMath::RandRange(15.0f, 30.0f) : FMath::RandRange(5.0f, 15.0f);
+	WeaponStats.MagazineSize = GoodStats[3] ? FMath::RandRange(20, 100) : FMath::RandRange(1, 19);
+	WeaponStats.ReloadTime = GoodStats[4] ? FMath::RandRange(0.1f, 1.0f) : FMath::RandRange(1.0f, 4.0f);
 }
 
-void AWeaponPickup::GenerateStat()
+EWeaponRarity AWeaponPickup::WeaponRarityPicker()
 {
-	ShuffleAttributeTypes();
-
-	int GoodAttributes = 0;
-	if (WeaponRarity == EWeaponRarity::Legendary)
+	// Rules:
+	// 50% chance of Common
+	// 30% chance of Rare
+	// 15% chance of Master
+	// 5% chance of Legendary
+	const float RandPercent = FMath::RandRange(0.0f, 1.0f);
+	
+	if (RandPercent <= 0.5f)
 	{
-		GoodAttributes = 4;
+		return EWeaponRarity::Common;
 	}
-	else if (WeaponRarity == EWeaponRarity::Master)
+	if (RandPercent <= 0.8f)
 	{
-		GoodAttributes = 3;
+		return EWeaponRarity::Rare;
 	}
-	else if (WeaponRarity == EWeaponRarity::Rare)
+	if (RandPercent <= 0.95f)
 	{
-		GoodAttributes = 2;
+		return EWeaponRarity::Master;
 	}
-
-	for (int i = 0; i < WeaponStats.Types.Num(); i++)
-	{
-		EStatQuality StatQuality = EStatQuality::Bad;
-
-		if (GoodAttributes > 0)
-		{
-			StatQuality = EStatQuality::Good;
-			GoodAttributes--;
-		}
-		
-		switch (WeaponStats.Types[i])
-		{
-			case EAttributeType::Accuracy:
-				GenerateAccuracyStat(StatQuality);
-				break;
-			case EAttributeType::FireRate:
-				GenerateFireRateStat(StatQuality);
-				break;
-			case EAttributeType::BaseDamage:
-				GenerateBaseDamageStat(StatQuality);
-				break;
-			case EAttributeType::MagazineSize:
-				GenerateMagazineStat(StatQuality);
-				break;
-			case EAttributeType::ReloadTime:
-				GenerateReloadTimeStat(StatQuality);
-				break;
-			default:
-				break;
-		}
-	}
+	
+	return EWeaponRarity::Legendary;
 }
 
-void AWeaponPickup::GenerateAccuracyStat(EStatQuality StatQuality)
+TArray<bool> AWeaponPickup::WeaponStatPicker(int32 NumOfGood, int32 NumOfStats)
 {
-	if (StatQuality == EStatQuality::Good)
+	// Fill the array with the correct number of good and bad stats.
+	TArray<bool> GoodStats;
+	for (int32 i = 0; i < NumOfStats; i++)
 	{
-		WeaponStats.Accuracy = FMath::RandRange(0.98f, 1.0f);
+		// Ternary condition: Will add true if I < NumOfGood otherwise add false.
+		GoodStats.Add(i < NumOfGood ? true : false);
 	}
-	else
-	{
-		WeaponStats.Accuracy = FMath::RandRange(0.9f, 0.98f);
-	}
-}
 
-void AWeaponPickup::GenerateFireRateStat(EStatQuality StatQuality)
-{
-	if (StatQuality == EStatQuality::Good)
+	// Array shuffling algorithm.
+	for (int32 i = 0; i < GoodStats.Num(); i++)
 	{
-		WeaponStats.FireRate = FMath::RandRange(0.05f, 0.2f);
+		// Get a random index from the GoodStats array.
+		const int32 RandIndex = FMath::RandRange(0, GoodStats.Num() - 1);
+		// Then swap the item at that random index with the item in the i index.
+		const bool Temp = GoodStats[i];
+		GoodStats[i] = GoodStats[RandIndex];
+		GoodStats[RandIndex] = Temp;
 	}
-	else
-	{
-		WeaponStats.FireRate = FMath::RandRange(0.2f, 1.0f);
-	}
-}
 
-void AWeaponPickup::GenerateBaseDamageStat(EStatQuality StatQuality)
-{
-	if (StatQuality == EStatQuality::Good)
-	{
-		WeaponStats.BaseDamage = FMath::RandRange(15.0f, 30.0f);
-	}
-	else
-	{
-		WeaponStats.BaseDamage = FMath::RandRange(5.0f, 15.0f);
-	}
+	return GoodStats;
 }
-
-void AWeaponPickup::GenerateMagazineStat(EStatQuality StatQuality)
-{
-	if (StatQuality == EStatQuality::Good)
-	{
-		WeaponStats.MagazineSize = FMath::RandRange(20, 100);
-	}
-	else
-	{
-		WeaponStats.MagazineSize = FMath::RandRange(1, 20);
-	}
-}
-
-void AWeaponPickup::GenerateReloadTimeStat(EStatQuality StatQuality)
-{
-	if (StatQuality == EStatQuality::Good)
-	{
-		WeaponStats.ReloadTime = FMath::RandRange(0.1f, 1.0f);
-	}
-	else
-	{
-		WeaponStats.ReloadTime = FMath::RandRange(1.0f, 4.0f);
-	}
-}
-

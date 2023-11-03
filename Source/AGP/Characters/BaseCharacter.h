@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AGP/WeaponComponent.h"
+#include "WeaponComponent.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -21,16 +21,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasWeapon();
 
-	void EquipWeapon(FWeaponStats WeaponStats);
+	void EquipWeapon(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
+	UFUNCTION(BlueprintImplementableEvent)
+	void FireWeaponGraphical();
+
+	/**
+	 * Will reload the weapon if the character has a weapon equipped.
+	 */
+	void Reload();
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void OnDeath();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere)
-	UWeaponComponent* WeaponComponent = nullptr;
 
 	/**
 	 * A scene component to store the position that hit scan shots start from. For the enemy character this could
@@ -40,17 +48,25 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BulletStartPosition;
 
+	/**
+	 * A component that holds information about the health of the character. This component has functions
+	 * for damaging the character and healing the character.
+	 */
 	UPROPERTY(VisibleAnywhere)
 	UHealthComponent* HealthComponent;
+
+	/**
+	 * An actor component that controls the logic for this characters equipped weapon.
+	 */
+	UPROPERTY(Replicated)
+	UWeaponComponent* WeaponComponent = nullptr;
 
 	/**
 	 * Will fire at a specific location and handles the impact of the shot such as determining what it hit and
 	 * deducting health if it hit a particular type of actor.
 	 * @param FireAtLocation The location that you want to fire at.
-	 * @return true if a shot was taken and false otherwise.
 	 */
-	bool Fire(const FVector& FireAtLocation);
-	void Reload();
+	void Fire(const FVector& FireAtLocation);
 
 public:	
 	// Called every frame
@@ -58,5 +74,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	void EquipWeaponImplementation(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastEquipWeapon(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
 
 };

@@ -81,7 +81,7 @@ void AEnemyCharacter::TickPatrol()
 void AEnemyCharacter::TickEngage()
 {
 	if (!SensedCharacter) return;
-	if (HasWeapon() && WeaponComponent->OutOfBullet())
+	if (HasWeapon())
 	{
 		WeaponComponent->Reload();
 	}

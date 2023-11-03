@@ -5,6 +5,8 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HealthComponent.h"
+// #include "PlayerCharacterHUD.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -12,6 +14,38 @@ APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+void APlayerCharacter::UpdateHealthBar(float HealthPercent)
+{
+	// if (PlayerHUD && IsLocallyControlled())
+	// {
+	// 	PlayerHUD->SetHealthBar(HealthPercent);
+	// } todo
+}
+
+void APlayerCharacter::UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize)
+{
+	// if (PlayerHUD && IsLocallyControlled())
+	// {
+	// 	PlayerHUD->SetAmmoText(RoundsRemaining, MagazineSize);
+	// } todo
+}
+
+void APlayerCharacter::DrawUI()
+{
+	// if (IsLocallyControlled() && PlayerHUDClass)
+	// {
+	// 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	// 	{
+	// 		PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
+	// 		if (PlayerHUD)
+	// 		{
+	// 			PlayerHUD->AddToPlayerScreen();
+	// 		}
+	// 	}
+	// }
+	// UpdateHealthBar(1.0f); todo
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +61,17 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
+
+	DrawUI();
+}
+
+void APlayerCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	// if (PlayerHUD)
+	// {
+	// 	PlayerHUD->RemoveFromParent();
+	// } todo
 }
 
 // Called every frame
@@ -47,7 +92,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		Input->BindAction(FireAction, ETriggerEvent::Triggered, this, &APlayerCharacter::FireWeapon);
-		Input->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Reload);
+		Input->BindAction(ReloadAction, ETriggerEvent::Started, this, &ABaseCharacter::Reload);
 	}
 }
 
@@ -78,5 +123,4 @@ void APlayerCharacter::FireWeapon(const FInputActionValue& Value)
 		Fire(BulletStartPosition->GetComponentLocation() + 10000.0f * CameraForward);
 	}
 }
-
 
