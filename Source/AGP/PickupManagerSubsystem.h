@@ -3,31 +3,38 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pickups/WeaponPickup.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "PickupManagerSubsystem.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class AGP_API UPickupManagerSubsystem : public UTickableWorldSubsystem
 {
 	GENERATED_BODY()
+public:
 
 	virtual TStatId GetStatId() const override
 	{
-		return GetStatID();
-	};
+		return TStatId();
+	}
+
+	void OnWeaponPickup(const FVector& PickupLocation);
 
 protected:
+	
+	/**
+	 * The world locations of all possible locations that a pickup can spawn.
+	 */
 	TArray<FVector> PossibleSpawnLocations;
-
-	float PickupSpawnRate = 0.5f;
+	TMap<FVector, AWeaponPickup*> SpawnManager;
+	float PickupSpawnRate = 5.0f;
 	float TimeSinceLastSpawn = 0.0f;
+	
+	virtual void Tick(float DeltaTime) override;
 
 private:
-	void PopulateSpawnLocations();
-	void SpawnWeaponPickup();
 
-	virtual void Tick(float DeltaTime) override;
+	void SpawnWeaponPickup();
+	void PopulateSpawnLocations();
+	void PopulateSpawnManager();
 };

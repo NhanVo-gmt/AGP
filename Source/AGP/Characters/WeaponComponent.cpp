@@ -96,21 +96,21 @@ bool UWeaponComponent::FireImplementation(const FVector& BulletStart, const FVec
 		{
 			if (UHealthComponent* HitCharacterHealth = HitCharacter->GetComponentByClass<UHealthComponent>())
 			{
-				// HitCharacterHealth->ApplyDamage(WeaponStats.BaseDamage); todo
+				HitCharacterHealth->ApplyDamage(WeaponStats.BaseDamage);
 				HitTarget = 2;
 			}
-			// DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
+			DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
 		}
 		else
 		{
-			// DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Orange, false, 1.0f);
+			DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Orange, false, 1.0f);
 		}
 		
 	}
 	else
 	{
 		OutHitLocation = AccuracyAdjustedFireAt;
-		// DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
+		DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
 	}
 
 	TimeSinceLastShot = 0.0f;
@@ -125,22 +125,22 @@ void UWeaponComponent::FireVisualImplementation(const FVector& BulletStart, cons
 	{
 		if (HitTarget == 1)
 		{
-			// GameInstance->SpawnGroundHitParticles(HitLocation); todo
+			GameInstance->SpawnGroundHitParticles(HitLocation);
 		}
 		else if (HitTarget == 2)
 		{
-			// GameInstance->SpawnBloodSpashParticles(HitLocation); todo
+			GameInstance->SpawnBloodSplashParticles(HitLocation);
 		}
 
 		if (APawn* Pawn = Cast<APawn>(GetOwner()))
 		{
 			if (Pawn->IsLocallyControlled())
 			{
-				// GameInstance->PlayGunshotSound2D(); todo
+				GameInstance->PlayGunshotSound2D();
 			}
 			else
 			{
-				// GameInstance->PlayGunshotAtLocation(BulletStart); todo
+				GameInstance->PlayGunshotAtLocation(BulletStart);
 			}
 		}
 	}
@@ -149,7 +149,7 @@ void UWeaponComponent::FireVisualImplementation(const FVector& BulletStart, cons
 	{
 		BaseCharacter->FireWeaponGraphical();
 	}
-	// DrawDebugLine(GetWorld(), BulletStart, HitLocation, FColor::Blue, false, 1.0f);
+	DrawDebugLine(GetWorld(), BulletStart, HitLocation, FColor::Blue, false, 1.0f);
 }
 
 void UWeaponComponent::ServerFire_Implementation(const FVector& BulletStart, const FVector& FireAtLocation)

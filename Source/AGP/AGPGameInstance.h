@@ -6,6 +6,8 @@
 #include "SquadActor.h"
 #include "Characters/EnemyCharacter.h"
 #include "Engine/GameInstance.h"
+#include "Sound/SoundCue.h"
+#include "NiagaraSystem.h"
 #include "Pickups/WeaponPickup.h"
 #include "AGPGameInstance.generated.h"
 
@@ -24,10 +26,21 @@ protected:
 	TSubclassOf<AEnemyCharacter> EnemyCharacterClass;
 	UPROPERTY(EditDefaultsOnly, Category="Squad Classes")
 	TSubclassOf<ASquadActor> SquadActorClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="Particle System")
+	UNiagaraSystem* GroundHitParticle;
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* BloodSplashParticle;
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* GunshotSoundCue;
 	
 public:
 	UClass* GetWeaponPickupClass() const;
 	UClass* GetEnemyCharacterClass() const;
 	UClass* GetSquadActorClass() const;
-	
+
+	void SpawnGroundHitParticles(const FVector& SpawnLocation);
+	void SpawnBloodSplashParticles(const FVector& SpawnLocation);
+	void PlayGunshotAtLocation(const FVector& Location);
+	void PlayGunshotSound2D();
 };

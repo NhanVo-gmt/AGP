@@ -2,6 +2,8 @@
 
 
 #include "AGPGameInstance.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 UClass* UAGPGameInstance::GetWeaponPickupClass() const
 {
@@ -16,6 +18,26 @@ UClass* UAGPGameInstance::GetEnemyCharacterClass() const
 UClass* UAGPGameInstance::GetSquadActorClass() const
 {
 	return SquadActorClass.Get();
+}
+
+void UAGPGameInstance::SpawnGroundHitParticles(const FVector& SpawnLocation)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), GroundHitParticle, SpawnLocation);
+}
+
+void UAGPGameInstance::SpawnBloodSplashParticles(const FVector& SpawnLocation)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodSplashParticle, SpawnLocation);
+}
+
+void UAGPGameInstance::PlayGunshotAtLocation(const FVector& Location)
+{
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), GunshotSoundCue, Location, FRotator::ZeroRotator);
+}
+
+void UAGPGameInstance::PlayGunshotSound2D()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), GunshotSoundCue);
 }
 
 
