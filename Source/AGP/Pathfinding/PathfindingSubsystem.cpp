@@ -85,6 +85,68 @@ void UPathfindingSubsystem::PlaceProceduralNodes(const TArray<FVector>& Landscap
 	}
 }
 
+void UPathfindingSubsystem::PlaceProceduralNodesWithWalls(const TArray<FVector>& LandscapeVertexData,
+	int32 MapWidth, int32 MapHeight, const TArray<TArray<bool>>& Walls)
+{
+	// Need to destroy all of the current nodes in the world.
+	RemoveAllNodes();
+	
+	// Then create and place all the nodes and store them in the ProcedurallyPlacedNodes array.
+	for (int Y = 0; Y < MapHeight; Y++)
+	{
+		for (int X = 0; X < MapWidth; X++)
+		{
+			// Spawn the node in
+			if (ANavigationNode* Node = GetWorld()->SpawnActor<ANavigationNode>())
+			{
+				Node->SetActorLocation(LandscapeVertexData[Y * MapWidth + X]);
+				ProcedurallyPlacedNodes.Add(Node);
+				ValidNodes.Add(!IsInWall(Walls, LandscapeVertexData[Y * MapWidth + X]));
+				
+			} else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Unable to spawn a node for some reason. This is bad!"))
+			}
+			
+		}
+	}
+	// Then add connections between all adjacent nodes.
+	for (int Y = 0; Y < MapHeight; Y++)
+	{
+		for (int X = 0; X < MapWidth; X++)
+		{
+			if (ANavigationNode* CurrentNode = ProcedurallyPlacedNodes[Y * MapWidth + X]) // Make sure it's a valid ptr.
+			{
+				// ADD CONNECTIONS:
+				// Add Left
+				if (X != MapWidth-1 && ValidNodes[Y * MapWidth + X+1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[Y * MapWidth + X+1]);
+				// Add Up
+				if (Y != MapHeight-1 && ValidNodes[(Y+1) * MapWidth + X])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y+1) * MapWidth + X]);
+				// Add Right
+				if (X != 0 && ValidNodes[Y * MapWidth + X-1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[Y * MapWidth + X-1]);
+				// Add Down
+				if (Y != 0 && ValidNodes[(Y-1) * MapWidth + X])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y-1) * MapWidth + X]);
+				// Add UpLeft
+				if (X != MapWidth-1 && Y != MapHeight-1 && ValidNodes[(Y+1) * MapWidth + X+1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y+1) * MapWidth + X+1]);
+				// Add UpRight
+				if (X != 0 && Y != MapHeight-1 && ValidNodes[(Y+1) * MapWidth + X-1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y+1) * MapWidth + X-1]);
+				// Add DownRight
+				if (X != 0 && Y != 0 && ValidNodes[(Y-1) * MapWidth+ X-1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y-1) * MapWidth+ X-1]);
+				// Add DownLeft
+				if (X != MapWidth-1 && Y != 0 && ValidNodes[(Y-1) * MapWidth + X+1])
+					CurrentNode->ConnectedNodes.Add(ProcedurallyPlacedNodes[(Y-1) * MapWidth + X+1]);
+			}
+		}
+	}
+}
+
 TArray<FVector> UPathfindingSubsystem::GetWaypointPositions()
 {
 	TArray<FVector> WaypointPositions = TArray<FVector>();
@@ -111,11 +173,32 @@ void UPathfindingSubsystem::RemoveAllNodes()
 {
 	Nodes.Empty();
 	ProcedurallyPlacedNodes.Empty();
+	ValidNodes.Empty();
 
 	for (TActorIterator<ANavigationNode> It(GetWorld()); It; ++It)
 	{
 		GetWorld()->DestroyActor(*It);
 	}
+}
+
+bool UPathfindingSubsystem::IsInWall(const TArray<TArray<bool>>& Walls, FVector SpawnPos)
+{
+	if (Walls.Num() <= 0) return true;
+	
+	for (int i = 0; i < Walls.Num(); i++)
+	{
+		for (int j = 0; j < Walls[0].Num(); j++)
+		{
+			if (!Walls[i][j]) continue;
+			
+			if (FVector::DistSquared(FVector(i, j, SpawnPos.Z), SpawnPos) < 1)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 ANavigationNode* UPathfindingSubsystem::GetRandomNode()

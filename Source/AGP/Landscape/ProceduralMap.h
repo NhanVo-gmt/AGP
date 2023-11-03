@@ -44,25 +44,26 @@ protected:
 	int WalkLength = 10;
 	UPROPERTY(EditAnywhere)
 	bool StartRandomlyEachIteration = true;
-
-	UPROPERTY(EditAnywhere)
-	int NumberBeforeRejection = 3;
-	UPROPERTY(EditAnywhere)
-	int MaxPickup = 3;
-
-	UPROPERTY(EditAnywhere)
-	bool bGenerateMap;
-	UPROPERTY(EditAnywhere)
-	bool bGeneratePickup;
 	UPROPERTY(EditAnywhere)
 	int32 Width;
 	UPROPERTY(EditAnywhere)
 	int32 Height;
 	UPROPERTY(EditAnywhere)
 	int32 VertexSpacing;
+	UPROPERTY(EditAnywhere)
+	bool bGenerateMap;
 
 	UPROPERTY(EditAnywhere)
+	int NumberBeforeRejection = 3;
+	UPROPERTY(EditAnywhere)
+	int MaxPickup = 3;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AWeaponPickup> WeaponPickupClass;
+	UPROPERTY(EditAnywhere)
+	bool bGeneratePickup;
+
+	UPROPERTY(EditAnywhere)
+	bool bGenerateNodes;
 	
 
 	// Called when the game starts or when spawned
@@ -75,6 +76,8 @@ protected:
 	void DestroyWalls();
 	void GeneratePickups();
 	void DestroyPickups();
+	void GenerateNodes();
+	void DestroyNodes();
 
 public:	
 	// Called every frame

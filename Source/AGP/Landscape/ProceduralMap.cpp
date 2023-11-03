@@ -8,6 +8,8 @@
 #include "ProceduralWall.h"
 #include "AGP/AGPGameInstance.h"
 #include "AGP/Characters/EnemyCharacter.h"
+#include "AGP/Pathfinding/NavigationNode.h"
+#include "AGP/Pathfinding/PathfindingSubsystem.h"
 #include "AGP/SpawnSystem/WorldSpawnSubsystem.h"
 #include "Core/Tests/Containers/TestUtils.h"
 
@@ -209,6 +211,32 @@ void AProceduralMap::DestroyPickups()
 	}
 }
 
+void AProceduralMap::GenerateNodes()
+{
+	TArray<FVector> SpawnPoints;
+	for (int32 Y = 0; Y < Height; Y++)
+	{
+		for (int32 X = 0; X < Width; X++)
+		{
+			FVector2D VertexLocation = FVector2D(X * VertexSpacing, Y * VertexSpacing);
+			SpawnPoints.Add(FVector(VertexLocation.X, VertexLocation.Y, 0.0f));
+		}
+	}
+
+	if (UPathfindingSubsystem* PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>())
+	{
+		PathfindingSubsystem->PlaceProceduralNodesWithWalls(SpawnPoints, Width, Height, Walls);
+	}
+}
+
+void AProceduralMap::DestroyNodes()
+{
+	for (TActorIterator<ANavigationNode> It(GetWorld()); It; ++It)
+	{
+		GetWorld()->DestroyActor(*It);
+	}
+}
+
 // Called every frame
 void AProceduralMap::Tick(float DeltaTime)
 {
@@ -228,6 +256,13 @@ void AProceduralMap::Tick(float DeltaTime)
 		bGeneratePickup = false;
 		DestroyPickups();
 		GeneratePickups();
+	}
+
+	if (bGenerateNodes)
+	{
+		bGenerateNodes = false;
+		DestroyNodes();
+		GenerateNodes();
 	}
 }
 

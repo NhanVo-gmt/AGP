@@ -49,6 +49,7 @@ public:
 	 * @param MapHeight The grid height of the landscape.
 	 */
 	void PlaceProceduralNodes(const TArray<FVector>& LandscapeVertexData, int32 MapWidth, int32 MapHeight);
+	void PlaceProceduralNodesWithWalls(const TArray<FVector>& LandscapeVertexData, int32 MapWidth, int32 MapHeight, const TArray<TArray<bool>>& Walls);
 	TArray<FVector> GetWaypointPositions();
 
 
@@ -61,11 +62,13 @@ protected:
 
 	// Procedural Map Logic
 	TArray<ANavigationNode*> ProcedurallyPlacedNodes;
+	TArray<bool> ValidNodes;
 
 private:
 
 	void PopulateNodes();
 	void RemoveAllNodes();
+	bool IsInWall(const TArray<TArray<bool>>& Walls, FVector SpawnPos);
 	ANavigationNode* GetRandomNode();
 	ANavigationNode* FindNearestNode(const FVector& TargetLocation);
 	
