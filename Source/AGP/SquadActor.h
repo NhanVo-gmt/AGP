@@ -45,8 +45,8 @@ protected:
 	
 	TArray<FVector> squadPath;
 	FVector playerLocation;
-	
-	std::vector<AEnemyCharacter*> members;
+	UPROPERTY(VisibleAnywhere)
+	TArray<AEnemyCharacter*> members;
 
 	void SquadRegroup();
 

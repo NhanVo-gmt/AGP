@@ -42,7 +42,7 @@ void ASquadActor::BeginPlay()
 			FVector spawnLocation = GetActorLocation();
 			spawnLocation.Z += 50;
 			AEnemyCharacter* SquadMember = GetWorld()->SpawnActor<AEnemyCharacter>(GameInstance->GetEnemyCharacterClass(), spawnLocation, FRotator::ZeroRotator);
-			members.push_back(SquadMember);
+			members.Push(SquadMember);
 			squadHealth += SquadMember->ReturnHealth();
 			SquadMember->AdjustPathfindingError();
 			UE_LOG(LogTemp, Display, TEXT("Spawning Squad Member...")); 
