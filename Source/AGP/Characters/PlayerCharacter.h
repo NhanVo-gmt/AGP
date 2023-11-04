@@ -49,11 +49,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	float LookSensitivity = 0.5f;
 
-	// UPROPERTY(EditDefaultsOnly)
-	// TSubclassOf<UPlayerCharacterHUD> PlayerHUDClass;
-	// UPROPERTY()
-	// UPlayerCharacterHUD* PlayerHUD;
-	//todo
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UPlayerCharacterHUD> PlayerHUDClass;
+	UPROPERTY()
+	UPlayerCharacterHUD* PlayerHUD;
 	
 	
 

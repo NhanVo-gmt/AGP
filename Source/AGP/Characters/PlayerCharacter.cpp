@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthComponent.h"
 // #include "PlayerCharacterHUD.h"
+#include "PlayerCharacterHUD.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -18,34 +19,34 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::UpdateHealthBar(float HealthPercent)
 {
-	// if (PlayerHUD && IsLocallyControlled())
-	// {
-	// 	PlayerHUD->SetHealthBar(HealthPercent);
-	// } todo
+	if (PlayerHUD && IsLocallyControlled())
+	{
+		PlayerHUD->SetHealthBar(HealthPercent);
+	} 
 }
 
 void APlayerCharacter::UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize)
 {
-	// if (PlayerHUD && IsLocallyControlled())
-	// {
-	// 	PlayerHUD->SetAmmoText(RoundsRemaining, MagazineSize);
-	// } todo
+	if (PlayerHUD && IsLocallyControlled())
+	{
+		PlayerHUD->SetAmmoText(RoundsRemaining, MagazineSize);
+	} 
 }
 
 void APlayerCharacter::DrawUI()
 {
-	// if (IsLocallyControlled() && PlayerHUDClass)
-	// {
-	// 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	// 	{
-	// 		PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
-	// 		if (PlayerHUD)
-	// 		{
-	// 			PlayerHUD->AddToPlayerScreen();
-	// 		}
-	// 	}
-	// }
-	// UpdateHealthBar(1.0f); todo
+	if (IsLocallyControlled() && PlayerHUDClass)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
+			if (PlayerHUD)
+			{
+				PlayerHUD->AddToPlayerScreen();
+			}
+		}
+	}
+	UpdateHealthBar(1.0f);
 }
 
 // Called when the game starts or when spawned
@@ -68,10 +69,10 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	// if (PlayerHUD)
-	// {
-	// 	PlayerHUD->RemoveFromParent();
-	// } todo
+	if (PlayerHUD)
+	{
+		PlayerHUD->RemoveFromParent();
+	} 
 }
 
 // Called every frame

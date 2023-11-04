@@ -200,7 +200,7 @@ void UWeaponComponent::UpdateAmmoUI()
 {
 	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner()))
 	{
-		// PlayerCharacter->UpdateAmmoUI(RoundsRemainingInMagazine, WeaponStats.MagazineSize);
+		PlayerCharacter->UpdateAmmoUI(RoundsRemainingInMagazine, WeaponStats.MagazineSize);
 	}
 }
 
