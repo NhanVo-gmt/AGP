@@ -235,6 +235,7 @@ ANavigationNode* UPathfindingSubsystem::FindNearestNode(const FVector& TargetLoc
 	float MinDistance = UE_MAX_FLT;
 	for (ANavigationNode* Node : Nodes)
 	{
+		if (Node == nullptr) continue;
 		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
 		if (Distance < MinDistance)
 		{
@@ -261,6 +262,7 @@ ANavigationNode* UPathfindingSubsystem::FindFurthestNode(const FVector& TargetLo
 	float MaxDistance = -1.0f;
 	for (ANavigationNode* Node : Nodes)
 	{
+		if (Node == nullptr) continue;
 		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
 		if (Distance > MaxDistance)
 		{

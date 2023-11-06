@@ -21,3 +21,12 @@ void UPlayerCharacterHUD::SetAmmoText(int32 RoundsRemaining, int32 MagazineSize)
 		AmmoText->SetText(FText::FromString(FString::FromInt(RoundsRemaining) + " / " + FString::FromInt(MagazineSize)));
 	}
 }
+
+void UPlayerCharacterHUD::SetSpotBar(float SpotPercent)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Spot Percent: %f"), SpotPercent);
+	if (SpotBar)
+	{
+		SpotBar->SetPercent(SpotPercent);
+	}
+}

@@ -23,6 +23,7 @@ public:
 
 	void UpdateHealthBar(float HealthPercent);
 	void UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize);
+	void UpdateSpotBar(float SpotPercent);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ChooseCharacterMesh();
@@ -54,7 +55,10 @@ protected:
 	UPROPERTY()
 	UPlayerCharacterHUD* PlayerHUD;
 	
-	
+	UPROPERTY(EditDefaultsOnly)
+	float FindingRadius = 1000.0f;
+	UPROPERTY(EditDefaultsOnly)
+	float TriggeringRadius = 300.0f;
 
 public:	
 	// Called every frame
@@ -64,9 +68,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 private:
+
+	float TimeSinceLastFinding = 0.0f;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void FireWeapon(const FInputActionValue& Value);
-
+	void FindEnemy();
+	void TriggerEnemy();
 };

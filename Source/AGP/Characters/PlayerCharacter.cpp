@@ -7,8 +7,12 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthComponent.h"
 // #include "PlayerCharacterHUD.h"
+#include "EnemyCharacter.h"
+#include "MathUtil.h"
 #include "PlayerCharacterHUD.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -30,6 +34,14 @@ void APlayerCharacter::UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize)
 	if (PlayerHUD && IsLocallyControlled())
 	{
 		PlayerHUD->SetAmmoText(RoundsRemaining, MagazineSize);
+	} 
+}
+
+void APlayerCharacter::UpdateSpotBar(float SpotPercent)
+{
+	if (PlayerHUD && IsLocallyControlled())
+	{
+		PlayerHUD->SetSpotBar(SpotPercent);
 	} 
 }
 
@@ -80,6 +92,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!IsLocallyControlled()) return;
+	
+	if (UGameplayStatics::GetRealTimeSeconds(GetWorld()) - TimeSinceLastFinding > 0.1f)
+	{
+		TimeSinceLastFinding = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+		FindEnemy();
+	}
 }
 
 // Called to bind functionality to input
@@ -122,6 +141,68 @@ void APlayerCharacter::FireWeapon(const FInputActionValue& Value)
 	if (BulletStartPosition)
 	{
 		Fire(BulletStartPosition->GetComponentLocation() + 10000.0f * CameraForward);
+	}
+}
+
+void APlayerCharacter::FindEnemy()
+{
+	// Set what actors to seek out from it's collision channel
+	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
+	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	// Ignore any specific actors
+	TArray<AActor*> ignoreActors;
+	// Ignore self or remove this line to not ignore any
+	ignoreActors.Init(this, 1);
+
+	// Array of actors that are inside the radius of the sphere
+	TArray<AActor*> outActors;
+	
+	// Sphere's spawn loccation within the world
+	FVector sphereSpawnLocation = GetActorLocation();
+	// Class that the sphere should hit against and include in the outActors array (Can be null)
+	UClass* seekClass = AEnemyCharacter::StaticClass(); // NULL;
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), sphereSpawnLocation, FindingRadius, traceObjectTypes, seekClass, ignoreActors, outActors);
+
+	// Optional: Use to have a visual representation of the SphereOverlapActors
+	// DrawDebugSphere(GetWorld(), GetActorLocation(), FindingRadius, 12, FColor::Red, true, 10.0f);
+
+	float MinDis = FindingRadius;
+	// Finally iterate over the outActor array
+	for (AActor* overlappedActor : outActors) {
+		float CalculatedDis = FVector::Dist(overlappedActor->GetActorLocation(), GetActorLocation());
+		if (CalculatedDis < MinDis)
+		{
+			MinDis = CalculatedDis;
+		}
+	}
+
+	UpdateSpotBar((FMathf::Clamp(FindingRadius - MinDis, 0, TriggeringRadius) / TriggeringRadius));
+}
+
+void APlayerCharacter::TriggerEnemy()
+{
+	// Set what actors to seek out from it's collision channel
+	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
+	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	// Ignore any specific actors
+	TArray<AActor*> ignoreActors;
+	// Ignore self or remove this line to not ignore any
+	ignoreActors.Init(this, 1);
+
+	// Array of actors that are inside the radius of the sphere
+	TArray<AActor*> outActors;
+	
+	// Sphere's spawn loccation within the world
+	FVector sphereSpawnLocation = GetActorLocation();
+	// Class that the sphere should hit against and include in the outActors array (Can be null)
+	UClass* seekClass = AEnemyCharacter::StaticClass();
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), sphereSpawnLocation, TriggeringRadius, traceObjectTypes, seekClass, ignoreActors, outActors);
+
+	// Finally iterate over the outActor array
+	for (AActor* overlappedActor : outActors) {
+		// todo enemy find player
 	}
 }
 
