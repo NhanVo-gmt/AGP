@@ -22,6 +22,7 @@ void ASquadActor::BeginPlay()
 {
 	
 	Super::BeginPlay();
+	if(GetLocalRole() != ROLE_Authority) return;
 	//Generate a random amount of squad members.
 	squadSize = FMath::RandRange(3, 4);
 	//Hook into the pathfinding to create coordinated movement.
