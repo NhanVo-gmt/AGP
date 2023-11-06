@@ -99,11 +99,18 @@ void UPathfindingSubsystem::PlaceProceduralNodesWithWalls(const TArray<FVector>&
 			// Spawn the node in
 			if (ANavigationNode* Node = GetWorld()->SpawnActor<ANavigationNode>())
 			{
-				FVector SpawnPos = FVector(LandscapeVertexData[Y * MapWidth + X].X * VertexSpacing, LandscapeVertexData[Y * MapWidth + X].Y * VertexSpacing, 10);
-				Node->SetActorLocation(SpawnPos);
-				ProcedurallyPlacedNodes.Add(Node);
-				ValidNodes.Add(!IsInWall(Walls, LandscapeVertexData[Y * MapWidth + X]));
-				
+				if (IsInWall(Walls, LandscapeVertexData[Y * MapWidth + X]))
+				{
+					ProcedurallyPlacedNodes.Add(nullptr);
+					ValidNodes.Add(false);
+				}
+				else
+				{
+					FVector SpawnPos = FVector(LandscapeVertexData[Y * MapWidth + X].X * VertexSpacing, LandscapeVertexData[Y * MapWidth + X].Y * VertexSpacing, 10);
+					Node->SetActorLocation(SpawnPos);
+					ProcedurallyPlacedNodes.Add(Node);
+					ValidNodes.Add(true);
+				}
 			} else
 			{
 				UE_LOG(LogTemp, Error, TEXT("Unable to spawn a node for some reason. This is bad!"))

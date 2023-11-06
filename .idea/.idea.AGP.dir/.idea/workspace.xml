@@ -9,13 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="68f7f188-9995-4325-a873-a81e3a4f284e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGP.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/AGP.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/2/KR/1FSZ8INGRL10KXP07TXYAD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/2/KR/1FSZ8INGRL10KXP07TXYAD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/WeaponComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/WeaponComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +121,8 @@
       <workItem from="1698992852642" duration="691000" />
       <workItem from="1698994820147" duration="4345000" />
       <workItem from="1699027228910" duration="2625000" />
-      <workItem from="1699068081111" duration="1813000" />
+      <workItem from="1699068081111" duration="2113000" />
+      <workItem from="1699251272962" duration="493000" />
     </task>
     <servers />
   </component>
