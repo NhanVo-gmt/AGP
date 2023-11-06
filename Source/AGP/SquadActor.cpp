@@ -22,35 +22,40 @@ void ASquadActor::BeginPlay()
 {
 	
 	Super::BeginPlay();
-	//Generate a random amount of squad members.
-	squadSize = FMath::RandRange(3, 4);
-	//Hook into the pathfinding to create coordinated movement.
-	PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
-	if (PathfindingSubsystem)
-	{
-		squadPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
-	} else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
-	}
-	//Spawn a squad at the spawn location.
-	for (int i = 0; i < squadSize; i++)
-	{
-		if (const UAGPGameInstance* GameInstance = GetWorld()->GetGameInstance<UAGPGameInstance>())
+
+	if (GetLocalRole() != ROLE_Authority) return;
+	
+		//Generate a random amount of squad members.
+		squadSize = FMath::RandRange(3, 4);
+		//Hook into the pathfinding to create coordinated movement.
+		PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
+		if (PathfindingSubsystem)
 		{
-			//Essentially a rework of the pickup system.
-			FVector spawnLocation = GetActorLocation();
-			spawnLocation.Z += 50;
-			AEnemyCharacter* SquadMember = GetWorld()->SpawnActor<AEnemyCharacter>(GameInstance->GetEnemyCharacterClass(), spawnLocation, FRotator::ZeroRotator);
-			members.Push(SquadMember);
-			squadHealth += SquadMember->ReturnHealth();
-			SquadMember->AdjustPathfindingError();
-			UE_LOG(LogTemp, Display, TEXT("Spawning Squad Member...")); 
+			squadPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+		} else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
 		}
-	}
-	maxHealth = squadHealth;
-	//Set the default state.
-	SquadPatrol();
+		//Spawn a squad at the spawn location.
+		for (int i = 0; i < squadSize; i++)
+		{
+			if (const UAGPGameInstance* GameInstance = GetWorld()->GetGameInstance<UAGPGameInstance>())
+			{
+				//Essentially a rework of the pickup system.
+				FVector spawnLocation = GetActorLocation();
+				spawnLocation.Z += 50;
+				AEnemyCharacter* SquadMember = GetWorld()->SpawnActor<AEnemyCharacter>(GameInstance->GetEnemyCharacterClass(), spawnLocation, FRotator::ZeroRotator);
+				members.Push(SquadMember);
+				squadHealth += SquadMember->ReturnHealth();
+				SquadMember->AdjustPathfindingError();
+				UE_LOG(LogTemp, Display, TEXT("Spawning Squad Member...")); 
+			}
+		}
+		maxHealth = squadHealth;
+		//Set the default state.
+		SquadPatrol();
+	
+	
 }
 //Currently unimplemented.
 void ASquadActor::SquadRegroup()

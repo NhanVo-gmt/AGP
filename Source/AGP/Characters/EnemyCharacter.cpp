@@ -147,6 +147,7 @@ bool AEnemyCharacter::PlayerCheck()
 
 void AEnemyCharacter::SquadBroken()
 {
+	UE_LOG(LogTemp, Display, TEXT("SQUAD BROKEN!"))
 	CurrentState = EEnemyState::Evade;
 }
 
