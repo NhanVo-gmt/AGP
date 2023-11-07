@@ -15,6 +15,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("Pawn Sensing Component");
+	
 }
 
 
@@ -66,11 +67,22 @@ void AEnemyCharacter::MoveAlongPath()
 	MovementDirection.Normalize();
 
 	//		b. Apply movement in that direction.
-	AddMovementInput(MovementDirection);
+	if (SensedCharacter != nullptr || flank == true)
+	{
+		AddMovementInput(MovementDirection);
+	}
+	else
+	{
+		AddMovementInput(MovementDirection, 0.5);
+	}
 	// 2. Check if it is close to the current stage of the path then pop it off.
 	if (FVector::Distance(GetActorLocation(), CurrentPath[CurrentPath.Num() - 1]) < PathfindingError)
 	{
 		CurrentPath.Pop();
+	}
+	if (CurrentPath.IsEmpty())
+	{
+		flank = false;
 	}
 }
 
@@ -124,7 +136,6 @@ void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
 	{
 		f.X += x;
 		f.Y += y;
-		
 	}
 	CurrentPath = orders;
 }
@@ -132,6 +143,11 @@ void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
 void AEnemyCharacter::ReceiveOrders(EEnemyState state)
 {
 	CurrentState = state;
+}
+
+void AEnemyCharacter::ReceiveOrders(bool x)
+{
+	flank = x;
 }
 
 float AEnemyCharacter::ReturnHealth()

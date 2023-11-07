@@ -173,6 +173,7 @@ void ASquadActor::SquadScatter()
 		{
 			
 			squaddie->ReceiveOrders(squadPath);
+			squaddie->ReceiveOrders(true);
 			i++;
 		}
 		else
