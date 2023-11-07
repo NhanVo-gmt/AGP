@@ -59,7 +59,12 @@ void AEnemyCharacter::MoveAlongPath()
 	// 1. Move towards the current stage of the path.
 	//		a. Calculate the direction from the current position to the target of the current stage of the path.
 	FVector MovementDirection = CurrentPath[CurrentPath.Num()-1] - GetActorLocation();
+	double x = FMath::RandRange(-100, 100);
+	double y = FMath::RandRange(-100, 100);
+	MovementDirection.X += x;
+	MovementDirection.Y += y;
 	MovementDirection.Normalize();
+
 	//		b. Apply movement in that direction.
 	AddMovementInput(MovementDirection);
 	// 2. Check if it is close to the current stage of the path then pop it off.
@@ -113,6 +118,14 @@ void AEnemyCharacter::TickAwaitingOrders()
 
 void AEnemyCharacter::ReceiveOrders(TArray<FVector> orders)
 {
+	double x = FMath::RandRange(-30, 30);
+	double y = FMath::RandRange(-30, 30);
+	for(FVector f : orders)
+	{
+		f.X += x;
+		f.Y += y;
+		
+	}
 	CurrentPath = orders;
 }
 
