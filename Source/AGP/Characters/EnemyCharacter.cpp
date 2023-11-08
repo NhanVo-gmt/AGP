@@ -6,7 +6,9 @@
 #include "HealthComponent.h"
 #include "PlayerCharacter.h"
 #include "AGP/AGPGameInstance.h"
+#include "AGP/MyLegacyCameraShake.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -156,6 +158,7 @@ void AEnemyCharacter::Explode()
 	}
 	if (UAGPGameInstance* GameInstance = Cast<UAGPGameInstance>(GetWorld()->GetGameInstance()))
 	{
+		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraShake(UMyLegacyCameraShake::StaticClass());
 		GameInstance->SpawnExplodeParticles(GetActorLocation());
 		K2_DestroyActor();
 	}
