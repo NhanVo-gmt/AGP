@@ -5,7 +5,9 @@
 #include "EngineUtils.h"
 #include "HealthComponent.h"
 #include "PlayerCharacter.h"
+#include "AGP/AGPGameInstance.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PawnSensingComponent.h"
 
 // Sets default values
@@ -69,6 +71,7 @@ void AEnemyCharacter::MoveAlongPath()
 	}
 }
 
+
 void AEnemyCharacter::TickPatrol()
 {
 	if (CurrentPath.IsEmpty())
@@ -81,17 +84,18 @@ void AEnemyCharacter::TickPatrol()
 void AEnemyCharacter::TickEngage()
 {
 	if (!SensedCharacter) return;
-	if (HasWeapon())
-	{
-		WeaponComponent->Reload();
-	}
+	// if (HasWeapon())
+	// {
+	// 	WeaponComponent->Reload();
+	// }
 	
 	if (CurrentPath.IsEmpty())
 	{
 		CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), SensedCharacter->GetActorLocation());
 	}
 	MoveAlongPath();
-	Fire(SensedCharacter->GetActorLocation());
+	
+	// Fire(SensedCharacter->GetActorLocation());
 }
 
 void AEnemyCharacter::TickEvade()
@@ -104,6 +108,57 @@ void AEnemyCharacter::TickEvade()
 		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), SensedCharacter->GetActorLocation());
 	}
 	MoveAlongPath();
+}
+
+bool AEnemyCharacter::CheckIfPlayerInExplodingRange()
+{
+	if (!SensedCharacter) return false;
+
+	if (FVector::Dist(GetActorLocation(), SensedCharacter->GetActorLocation()) < ReadyToExplodeRadius)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void AEnemyCharacter::Explode()
+{
+	// Set what actors to seek out from it's collision channel
+	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
+	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	// Ignore any specific actors
+	TArray<AActor*> ignoreActors;
+	// Ignore self or remove this line to not ignore any
+	ignoreActors.Init(this, 1);
+
+	// Array of actors that are inside the radius of the sphere
+	TArray<AActor*> outActors;
+	
+	// Sphere's spawn loccation within the world
+	FVector sphereSpawnLocation = GetActorLocation();
+	// Class that the sphere should hit against and include in the outActors array (Can be null)
+	UClass* seekClass = ABaseCharacter::StaticClass(); // NULL;
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), sphereSpawnLocation, ExplodingRadius, traceObjectTypes, seekClass, ignoreActors, outActors);
+	
+	// Finally iterate over the outActor array
+	for (AActor* overlappedActor : outActors) {
+		ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(overlappedActor);
+		if (BaseCharacter != nullptr)
+		{
+			UHealthComponent* BaseHealtComponent = BaseCharacter->GetComponentByClass<UHealthComponent>();
+			if (BaseHealtComponent != nullptr)
+			{
+				BaseHealtComponent->ApplyDamage(ExplodingDamage);
+			}
+		}
+	}
+	if (UAGPGameInstance* GameInstance = Cast<UAGPGameInstance>(GetWorld()->GetGameInstance()))
+	{
+		GameInstance->SpawnExplodeParticles(GetActorLocation());
+		K2_DestroyActor();
+	}
 }
 
 void AEnemyCharacter::TickAwaitingOrders()
@@ -181,6 +236,12 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UpdateSight();
+	if (CheckIfPlayerInExplodingRange())
+	{
+		CurrentState = EEnemyState::Explode;
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AEnemyCharacter::Explode, ExplodingDelay, false);
+	}
 	
 	switch(CurrentState)
 	{
@@ -195,7 +256,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			{
 				CurrentState = EEnemyState::Evade;
 			}
-			//CurrentPath.Empty();
+			CurrentPath.Empty();
 		}
 		break;
 	case EEnemyState::Engage:

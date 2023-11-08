@@ -23,7 +23,8 @@ enum class EEnemyState : uint8
 	Patrol,
 	Engage,
 	Evade,
-	ReceivingOrders
+	ReceivingOrders,
+	Explode
 };
 
 /**
@@ -80,6 +81,10 @@ protected:
 	 */
 	void TickEvade();
 
+	bool CheckIfPlayerInExplodingRange();
+
+	void Explode();
+
 
 	//Beginning of "Squad-Based" logic.
 	//Logic that will control the enemies in Investigation state.
@@ -129,7 +134,7 @@ protected:
 	 * found in the tick function of this enemy character.
 	 */
 	UPROPERTY(EditAnywhere)
-	EEnemyState CurrentState = EEnemyState::ReceivingOrders;
+	EEnemyState CurrentState = EEnemyState::Patrol;
 
 	/**
 	 * Some arbitrary error value for determining how close is close enough before moving onto the next step in the path.
@@ -137,6 +142,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float PathfindingError = 100.0f; // 150 cm from target by default.
 
+	UPROPERTY(EditAnywhere)
+	float ReadyToExplodeRadius = 500.0f;
+	UPROPERTY(EditAnywhere)
+	float ExplodingDelay = 1.0f;
+	UPROPERTY(EditAnywhere)
+	float ExplodingDamage = 30.0f;
+	UPROPERTY(EditAnywhere)
+	float ExplodingRadius = 1000.0f;
 	
 
 public:	

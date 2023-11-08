@@ -30,6 +30,11 @@ void UAGPGameInstance::SpawnBloodSplashParticles(const FVector& SpawnLocation)
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodSplashParticle, SpawnLocation);
 }
 
+void UAGPGameInstance::SpawnExplodeParticles(const FVector& SpawnLocation)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplodeParticle, SpawnLocation);
+}
+
 void UAGPGameInstance::PlayGunshotAtLocation(const FVector& Location)
 {
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), GunshotSoundCue, Location, FRotator::ZeroRotator);
