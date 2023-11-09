@@ -39,6 +39,7 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Display, TEXT("Spawned Squad Member."))
 
+	CurrentState = EEnemyState::Patrol;
 	PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
 	if (PathfindingSubsystem)
 	{
@@ -124,6 +125,13 @@ bool AEnemyCharacter::CheckIfPlayerInExplodingRange()
 	return false;
 }
 
+void AEnemyCharacter::ReadyToExplode()
+{
+	CurrentState = EEnemyState::Explode;
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AEnemyCharacter::Explode, ExplodingDelay, false);
+}
+
 void AEnemyCharacter::Explode()
 {
 	// Set what actors to seek out from it's collision channel
@@ -156,9 +164,19 @@ void AEnemyCharacter::Explode()
 			}
 		}
 	}
+	ServerExplode();
+}
+
+void AEnemyCharacter::ServerExplode_Implementation()
+{
+	MulticastExplode();
+}
+
+void AEnemyCharacter::MulticastExplode_Implementation()
+{
 	if (UAGPGameInstance* GameInstance = Cast<UAGPGameInstance>(GetWorld()->GetGameInstance()))
 	{
-		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraShake(UMyLegacyCameraShake::StaticClass());
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(UMyLegacyCameraShake::StaticClass());
 		GameInstance->SpawnExplodeParticles(GetActorLocation());
 		K2_DestroyActor();
 	}
@@ -239,12 +257,19 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UpdateSight();
-	if (CheckIfPlayerInExplodingRange())
+
+	if (CurrentState != EEnemyState::Explode)
 	{
-		CurrentState = EEnemyState::Explode;
-		FTimerHandle UnusedHandle;
-		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AEnemyCharacter::Explode, ExplodingDelay, false);
+		if (CheckIfPlayerInExplodingRange())
+		{
+			ReadyToExplode();
+		}
+		else if (HealthComponent->IsDead())
+		{
+			Explode();
+		}
 	}
+	
 	
 	switch(CurrentState)
 	{

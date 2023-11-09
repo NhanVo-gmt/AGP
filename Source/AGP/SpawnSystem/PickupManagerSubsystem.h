@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pickups/WeaponPickup.h"
+#include "../Pickups/WeaponPickup.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "PickupManagerSubsystem.generated.h"
 
@@ -12,7 +12,6 @@ class AGP_API UPickupManagerSubsystem : public UTickableWorldSubsystem
 {
 	GENERATED_BODY()
 public:
-
 	virtual TStatId GetStatId() const override
 	{
 		return TStatId();

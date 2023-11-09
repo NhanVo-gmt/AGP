@@ -3,7 +3,8 @@
 
 #include "PickupManagerSubsystem.h"
 
-#include "Pickups/WeaponPickup.h"
+#include "EngineUtils.h"
+#include "../Pickups/WeaponPickup.h"
 #include "AGP/AGPGameInstance.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
 
@@ -53,7 +54,7 @@ void UPickupManagerSubsystem::SpawnWeaponPickup()
 {
 	if (PossibleSpawnLocations.IsEmpty())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup."))
+		UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup."));
 		return;
 	}
 	
@@ -100,4 +101,8 @@ void UPickupManagerSubsystem::PopulateSpawnLocations()
 void UPickupManagerSubsystem::PopulateSpawnManager()
 {
 	SpawnManager.Empty();
+	for (TActorIterator<AWeaponPickup> It(GetWorld()); It; ++It)
+	{
+		SpawnManager.Add(It->GetActorLocation(), *It);
+	}
 }

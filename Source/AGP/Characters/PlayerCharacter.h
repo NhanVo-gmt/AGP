@@ -75,5 +75,4 @@ private:
 	void Look(const FInputActionValue& Value);
 	void FireWeapon(const FInputActionValue& Value);
 	void FindEnemy();
-	void TriggerEnemy();
 };

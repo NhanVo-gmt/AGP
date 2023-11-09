@@ -56,6 +56,9 @@ public:
 	//Moved here for prototyping's sake.
 	ANavigationNode* FindFurthestNode(const FVector& TargetLocation);
 
+	FVector FindNearestNodeWithMinimumDistance(const FVector& TargetLocation, const float MinDistance);
+	FVector FindRandomNodeWithDistanceCondition(const FVector& TargetLocation, const float MinDistance, const float MaxDistance);
+
 protected:
 	
 	TArray<ANavigationNode*> Nodes;
