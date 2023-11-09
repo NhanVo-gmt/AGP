@@ -23,9 +23,9 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere)
-	float MinSpawnDistance = 4000.0f;
+	float MinSpawnDistance = 5000.0f;
 	UPROPERTY(EditAnywhere)
-	float MaxSpawnDistance = 7000.0f;
+	float MaxSpawnDistance = 100000.0f;
 	UPROPERTY(EditAnywhere)
 	float EnemySpawnRate = 10.0f;
 	float TimeSinceLastSpawn = 0.0f;
