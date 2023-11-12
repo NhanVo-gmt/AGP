@@ -40,14 +40,21 @@ protected:
 	int squadId;
 	UPROPERTY(VisibleAnywhere)
 	int squadSize;
+	UPROPERTY(Replicated)
 	float maxHealth;
+	UPROPERTY(Replicated)
 	float squadHealth;
-	
+	UPROPERTY(Replicated)
 	TArray<FVector> squadPath;
 	FVector playerLocation;
-	
-	std::vector<AEnemyCharacter*> members;
+	UPROPERTY(VisibleAnywhere, Replicated)
+	TArray<AEnemyCharacter*> members;
 
+	UPROPERTY(EditDefaultsOnly, Replicated)
+	float pathModifier = 0.75;
+	UPROPERTY(EditDefaultsOnly, Replicated)
+	int pathSizeCheck = 8;
+	
 	void SquadRegroup();
 
 	void SquadRetreat();
@@ -61,9 +68,11 @@ protected:
 	bool PlayerCheck();
 
 	void ClearOrders();
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 	ESquadState CurrentState = ESquadState::Patrol;
 
 

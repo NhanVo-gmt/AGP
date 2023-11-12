@@ -4,6 +4,7 @@
 #include "SquadActor.h"
 
 #include "AGPGameInstance.h"
+#include "Net/UnrealNetwork.h"
 #include "Pathfinding/PathfindingSubsystem.h"
 
 // Sets default values
@@ -11,7 +12,7 @@ ASquadActor::ASquadActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 	LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
 	SetRootComponent(LocationComponent);
 
@@ -22,6 +23,7 @@ void ASquadActor::BeginPlay()
 {
 	
 	Super::BeginPlay();
+	if (GetLocalRole() != ROLE_Authority) return;
 	//Generate a random amount of squad members.
 	squadSize = FMath::RandRange(3, 4);
 	//Hook into the pathfinding to create coordinated movement.
@@ -42,7 +44,7 @@ void ASquadActor::BeginPlay()
 			FVector spawnLocation = GetActorLocation();
 			spawnLocation.Z += 50;
 			AEnemyCharacter* SquadMember = GetWorld()->SpawnActor<AEnemyCharacter>(GameInstance->GetEnemyCharacterClass(), spawnLocation, FRotator::ZeroRotator);
-			members.push_back(SquadMember);
+			members.Push(SquadMember);
 			squadHealth += SquadMember->ReturnHealth();
 			SquadMember->AdjustPathfindingError();
 			UE_LOG(LogTemp, Display, TEXT("Spawning Squad Member...")); 
@@ -112,23 +114,38 @@ void ASquadActor::SquadScatter()
 	//buffer to hold the flanking path.
 	//populate buffer path. Since its a path away this range from just splitting up to actually taking alternate route -- which can make their tactics feel more dynamic.
 	TArray<FVector> bufferPath = PathfindingSubsystem->GetPathAway(members[0]->GetActorLocation(), playerLocation);
+
+		UE_LOG(LogTemp, Display, TEXT("Buffer path is: %d"), bufferPath.Num()); 
+	
 	
 	int y = 0;
 	// Small check to see if the scatter is too long, uses an arbitrary number.
-	 if (bufferPath.Num() >= 3)
+	 if (bufferPath.Num() >= pathSizeCheck)
 	 {
-	 	y = int(bufferPath.Num()/2);
+	 	UE_LOG(LogTemp, Display, TEXT("BufferTest1")); 
+	 	y = int(bufferPath.Num()*pathModifier);
 	 }
+	UE_LOG(LogTemp, Display, TEXT("Buffer Path Index is %d"), y); 
 	FVector vertexLocation = bufferPath[y];
 
 	int z = 0;
 	// Small check to see if the scatter is too long, uses an arbitrary number.
 	TArray<FVector> bufferRandPath = PathfindingSubsystem->GetRandomPath(vertexLocation);
-	if (bufferPath.Num() >= 3)
+	if (bufferRandPath.Num() >= pathSizeCheck)
 	{
-		z = bufferRandPath.Num()/2;
+		UE_LOG(LogTemp, Display, TEXT("BufferTest2")); 
+
+		z = int(bufferRandPath.Num()*pathModifier);
 	}
-	FVector bufferRandDest = bufferRandPath[z];
+	UE_LOG(LogTemp, Display, TEXT("Buffer Path Index is %d"), z); 
+
+	FVector bufferRandDest;
+	if (!bufferRandPath.IsEmpty())
+	{
+		bufferRandDest = bufferRandPath[z];
+	}
+	UE_LOG(LogTemp, Display, TEXT("Buffer path is: %d"), bufferRandPath.Num()); 
+
 	//Create a path from the flank to the player.
 	PlayerCheck();
 	squadPath = PathfindingSubsystem->GetPath(bufferRandDest, playerLocation);
@@ -142,7 +159,9 @@ void ASquadActor::SquadScatter()
 	{
 		squadPath.Push(bufferPath[x]);
 	}
-	
+
+	UE_LOG(LogTemp, Display, TEXT("Buffer flank path is: %d"), squadPath.Num()); 
+
 	// Issue orders.
 	for (AEnemyCharacter* squaddie : members)
 	{
@@ -154,6 +173,7 @@ void ASquadActor::SquadScatter()
 		{
 			
 			squaddie->ReceiveOrders(squadPath);
+			squaddie->ReceiveOrders(true);
 			i++;
 		}
 		else
@@ -171,20 +191,33 @@ void ASquadActor::SquadScatter()
 //Checking if the squad is on the move or not.
 bool ASquadActor::OrdersCheck()
 {
+	int numTrue = 0;
 	for (AEnemyCharacter* squaddie : members)
 	{
-		if(squaddie->NeedOrders() == false)
+		if (squaddie->NeedOrders())
 		{
-			
-			return false;
+			numTrue++;
 		}
-		else
-		{
-			return true;
-		}
+		
+		// if(squaddie->NeedOrders() == false)
+		// {
+		// 	
+		// 	return false;
+		// }
+		// else
+		// {
+		// 	numTrue++;
+		// }
 	}
-	UE_LOG(LogTemp, Display, TEXT("Orders completed.")); 
-	return true;
+	if (numTrue >= 2)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
 	
 	
 }
@@ -215,13 +248,29 @@ void ASquadActor::ClearOrders()
 	
 }
 
+void ASquadActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ASquadActor, CurrentState);
+	DOREPLIFETIME(ASquadActor, members);
+	DOREPLIFETIME(ASquadActor, squadPath);
+	DOREPLIFETIME(ASquadActor, maxHealth);
+	DOREPLIFETIME(ASquadActor, squadHealth);
+
+
+
+
+}
+
+
 // Called every frame
 void ASquadActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//Prototype feature to break squad when down a third of their strength.
-	if (squadHealth <= maxHealth/3)
+	if (squadHealth <= maxHealth/3 && members.IsEmpty() == false)
 	{
+		//UE_LOG(LogTemp, Display, TEXT("Breaking.")); 
 		CurrentState = ESquadState::Broken;
 	}
 	//A state machine similar to the EnemyCharacter state machine.
@@ -257,6 +306,7 @@ void ASquadActor::Tick(float DeltaTime)
 		{
 			squaddie->SquadBroken();
 		}
+		Destroy();
 		break;
 	}
 	

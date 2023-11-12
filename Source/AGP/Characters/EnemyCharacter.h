@@ -40,9 +40,8 @@ public:
 	AEnemyCharacter();
 
 	void ReceiveOrders(TArray<FVector> orders);
-	
-
 	void ReceiveOrders(EEnemyState state);
+	void ReceiveOrders(bool x);
 
 	float ReturnHealth();
 
@@ -57,6 +56,8 @@ public:
 	FVector PlayerLocation();
 
 	void AdjustPathfindingError();
+
+	bool flank = false;
 
 protected:
 	// Called when the game starts or when spawned
