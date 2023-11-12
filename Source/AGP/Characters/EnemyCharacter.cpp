@@ -8,7 +8,6 @@
 #include "AGP/AGPGameInstance.h"
 #include "AGP/MyLegacyCameraShake.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
-#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -146,6 +145,7 @@ void AEnemyCharacter::ReadyToExplode()
 {
 	CurrentState = EEnemyState::Explode;
 	FTimerHandle UnusedHandle;
+	// Wait for delay before trigger exploding
 	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AEnemyCharacter::Explode, ExplodingDelay, false);
 }
 
@@ -289,6 +289,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 	if (CurrentState != EEnemyState::Explode)
 	{
+		// If Player is in exploding range then explode
 		if (CheckIfPlayerInExplodingRange())
 		{
 			ReadyToExplode();

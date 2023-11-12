@@ -224,6 +224,7 @@ bool ASquadActor::OrdersCheck()
 //Check if anyone in the squad has sight on the player.
 bool ASquadActor::PlayerCheck()
 {
+	
 	for (AEnemyCharacter* squaddie : members)
 	{
 		if(squaddie->PlayerCheck() == true)
@@ -267,6 +268,10 @@ void ASquadActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 void ASquadActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// Check to see if an enemy is destroy;
+	CheckMember();
+	
 	//Prototype feature to break squad when down a third of their strength.
 	if (squadHealth <= maxHealth/3 && members.IsEmpty() == false)
 	{
@@ -309,8 +314,19 @@ void ASquadActor::Tick(float DeltaTime)
 		Destroy();
 		break;
 	}
-	
-	
 
+}
+
+void ASquadActor::CheckMember()
+{
+	for (auto member : members)
+	{
+		if (member == nullptr)
+		{
+			members.Remove(member);
+		}
+	}
+
+	if (members.Num() == 0) K2_DestroyActor();
 }
 

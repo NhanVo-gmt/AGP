@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include "CoreMinimal.h"
 #include "Characters/EnemyCharacter.h"
 #include "GameFramework/Actor.h"
@@ -80,4 +78,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void CheckMember();
 };

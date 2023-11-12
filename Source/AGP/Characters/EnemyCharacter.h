@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "BaseCharacter.h"
 #include "PlayerCharacter.h"
 #include "EnemyCharacter.generated.h"
@@ -146,9 +145,12 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere)
 	float PathfindingError = 100.0f; // 150 cm from target by default.
+	
 
+	// Waiting and ready to explode
 	UPROPERTY(EditAnywhere)
 	float ReadyToExplodeRadius = 700.0f;
+	// Waiting time before exploding
 	UPROPERTY(EditAnywhere)
 	float ExplodingDelay = 1.0f;
 	UPROPERTY(EditAnywhere)
