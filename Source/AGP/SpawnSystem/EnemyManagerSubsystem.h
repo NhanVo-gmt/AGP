@@ -30,10 +30,12 @@ protected:
 	float EnemySpawnRate = 10.0f;
 	float TimeSinceLastSpawn = 0.0f;
 	
+	TArray<APlayerController*> PlayerControllers;
+	
 	virtual void Tick(float DeltaTime) override;
 
 private:
 	
-	
 	void SpawnEnemy();
+	void PopulatePlayers();
 };

@@ -4,6 +4,7 @@
 #include "EnemyManagerSubsystem.h"
 
 #include "EngineUtils.h"
+#include "MathUtil.h"
 #include "AGP/AGPGameInstance.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
 
@@ -26,15 +27,35 @@ void UEnemyManagerSubsystem::Tick(float DeltaTime)
 
 void UEnemyManagerSubsystem::SpawnEnemy()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Spawn"));
+	PopulatePlayers();
+	if (PlayerControllers.Num() == 0) return;
+	
 	if (const UAGPGameInstance* GameInstance =
 		GetWorld()->GetGameInstance<UAGPGameInstance>())
 	{
-		for (TActorIterator<APlayerController> It(GetWorld()); It; ++It)
+		int rand = FMath::RandRange(0, 5);
+		if (rand == 5)
 		{
-			FVector SpawnLocation = GetWorld()->GetSubsystem<UPathfindingSubsystem>()->FindRandomNodeWithDistanceCondition(It->K2_GetActorLocation(), MinSpawnDistance, MaxSpawnDistance);
+			FVector SpawnLocation = GetWorld()->GetSubsystem<UPathfindingSubsystem>()->FindRandomNodeWithDistanceCondition(PlayerControllers[FMath::RandRange(0, 1)]->K2_GetActorLocation(), MinSpawnDistance, MaxSpawnDistance);
+			SpawnLocation.Z += 50.0f;
+			GetWorld()->SpawnActor<ASquadActor>(GameInstance->GetSquadActorClass(), SpawnLocation, FRotator::ZeroRotator);
+		}
+		else
+		{
+			FVector SpawnLocation = GetWorld()->GetSubsystem<UPathfindingSubsystem>()->FindRandomNodeWithDistanceCondition(PlayerControllers[FMath::RandRange(0, 1)]->K2_GetActorLocation(), MinSpawnDistance, MaxSpawnDistance);
 			SpawnLocation.Z += 50.0f;
 			GetWorld()->SpawnActor<AEnemyCharacter>(GameInstance->GetEnemyCharacterClass(), SpawnLocation, FRotator::ZeroRotator);
 		}
+		
+	}
+}
+
+void UEnemyManagerSubsystem::PopulatePlayers()
+{
+	if (PlayerControllers.Num() > 0) return;
+	
+	for (TActorIterator<APlayerController> It(GetWorld()); It; ++It)
+	{
+		PlayerControllers.Add(*It);
 	}
 }
