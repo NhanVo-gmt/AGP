@@ -7,11 +7,7 @@
 #include "CoreMinimal.h"
 #include "SquadActor.h"
 #include "Characters/EnemyCharacter.h"
-#include "PickupManagerSubsystem.h"
-#include "AGPGameInstance.h"
-#include "Pathfinding/PathfindingSubsystem.h"
 #include "GameFramework/Actor.h"
-#include "Pathfinding/NavigationNode.h"
 #include "Overlord.generated.h"
 
 

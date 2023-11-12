@@ -274,6 +274,61 @@ ANavigationNode* UPathfindingSubsystem::FindFurthestNode(const FVector& TargetLo
 	return FurthestNode;
 }
 
+
+FVector UPathfindingSubsystem::FindNearestNodeWithMinimumDistance(const FVector& TargetLocation,
+                                                                  const float MinDistance)
+{
+	// Failure condition.
+	if (Nodes.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("The nodes array is empty."))
+		return FVector::Zero();
+	}
+
+	// Using the minimum programming pattern to find the closest node.
+	// What is the Big O complexity of this? Can you do it more efficiently?
+	ANavigationNode* ClosestNode = nullptr;
+	float MinDistanceWithinRange = UE_MAX_FLT;
+	for (ANavigationNode* Node : Nodes)
+	{
+		if (Node == nullptr) continue;
+		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
+		if (Distance < MinDistanceWithinRange && Distance >= MinDistance)
+		{
+			MinDistanceWithinRange = Distance;
+			ClosestNode = Node;
+		}
+	}
+
+	return ClosestNode->GetActorLocation();
+}
+
+FVector UPathfindingSubsystem::FindRandomNodeWithDistanceCondition(const FVector& TargetLocation,
+	const float MinDistance, const float MaxDistance)
+{
+	TArray<FVector> OutsideNodes = TArray<FVector>();
+	// Failure condition.
+	if (Nodes.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("The nodes array is empty."))
+		return FVector::Zero();
+	}
+
+	// Using the minimum programming pattern to find the closest node.
+	// What is the Big O complexity of this? Can you do it more efficiently?
+	for (ANavigationNode* Node : Nodes)
+	{
+		if (Node == nullptr) continue;
+		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
+		if (Distance >= MinDistance && Distance <= MaxDistance)
+		{
+			OutsideNodes.Add(Node->GetActorLocation());
+		}
+	}
+
+	return OutsideNodes[FMath::RandRange(0, OutsideNodes.Num()-1)];
+}
+
 TArray<FVector> UPathfindingSubsystem::GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode)
 {
 	if (!StartNode || !EndNode)

@@ -30,7 +30,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(Replicated)
-	float MaxHealth = 100.0f;
+	float MaxHealth = 50.0f;
 	UPROPERTY(ReplicatedUsing=UpdateHealthBar)
 	float CurrentHealth;
 	bool bIsDead = false;

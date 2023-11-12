@@ -4,6 +4,7 @@
 #include "WeaponPickup.h"
 
 #include "../Characters/PlayerCharacter.h"
+#include "AGP/SpawnSystem/PickupManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
 void AWeaponPickup::BeginPlay()
@@ -27,10 +28,10 @@ void AWeaponPickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	{
 		Player->EquipWeapon(true, WeaponStats);
 
-		// if (UPickupManagerSubsystem* PickupManagerSubsystem = GetWorld()->GetSubsystem<UPickupManagerSubsystem>())
-		// {
-		// 	PickupManagerSubsystem->OnWeaponPickup(GetActorLocation());
-		// } todo
+		if (UPickupManagerSubsystem* PickupManagerSubsystem = GetWorld()->GetSubsystem<UPickupManagerSubsystem>())
+		{
+			PickupManagerSubsystem->OnWeaponPickup(GetActorLocation());
+		} 
 	}
 }
 

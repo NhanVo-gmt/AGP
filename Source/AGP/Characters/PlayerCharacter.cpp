@@ -180,29 +180,3 @@ void APlayerCharacter::FindEnemy()
 	UpdateSpotBar((FMathf::Clamp(FindingRadius - MinDis, 0, TriggeringRadius) / TriggeringRadius));
 }
 
-void APlayerCharacter::TriggerEnemy()
-{
-	// Set what actors to seek out from it's collision channel
-	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
-	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
-
-	// Ignore any specific actors
-	TArray<AActor*> ignoreActors;
-	// Ignore self or remove this line to not ignore any
-	ignoreActors.Init(this, 1);
-
-	// Array of actors that are inside the radius of the sphere
-	TArray<AActor*> outActors;
-	
-	// Sphere's spawn loccation within the world
-	FVector sphereSpawnLocation = GetActorLocation();
-	// Class that the sphere should hit against and include in the outActors array (Can be null)
-	UClass* seekClass = AEnemyCharacter::StaticClass();
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), sphereSpawnLocation, TriggeringRadius, traceObjectTypes, seekClass, ignoreActors, outActors);
-
-	// Finally iterate over the outActor array
-	for (AActor* overlappedActor : outActors) {
-		// todo enemy find player
-	}
-}
-

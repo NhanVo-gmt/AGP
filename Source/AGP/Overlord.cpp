@@ -3,7 +3,10 @@
 
 #include "Overlord.h"
 
+#include "AGPGameInstance.h"
 #include "EngineUtils.h"
+#include "Pathfinding/NavigationNode.h"
+#include "Pathfinding/PathfindingSubsystem.h"
 
 // Sets default values
 AOverlord::AOverlord()

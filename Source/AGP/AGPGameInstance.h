@@ -32,6 +32,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraSystem* BloodSplashParticle;
 	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* ExplodeParticle;
+	UPROPERTY(EditDefaultsOnly)
 	USoundCue* GunshotSoundCue;
 	
 public:
@@ -41,6 +43,7 @@ public:
 
 	void SpawnGroundHitParticles(const FVector& SpawnLocation);
 	void SpawnBloodSplashParticles(const FVector& SpawnLocation);
+	void SpawnExplodeParticles(const FVector& SpawnLocation);
 	void PlayGunshotAtLocation(const FVector& Location);
 	void PlayGunshotSound2D();
 };

@@ -7,16 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="68f7f188-9995-4325-a873-a81e3a4f284e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacterHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacterHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/MyProceduralLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacterHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacterHUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacterHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacterHUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="68f7f188-9995-4325-a873-a81e3a4f284e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,8 +16,17 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/AGP/Characters/WeaponComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/AGP/Characters/WeaponComponent.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -41,7 +41,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Online-System&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Enemy-Explode&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -65,7 +65,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.2\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass34\Assignment34\AGP.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\AGP\AGP.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -73,7 +73,7 @@
       <configuration_3>
         <option name="CONFIGURATION" value="DebugGame" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass34\Assignment34\Binaries\Win64\AGP-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\AGP\Binaries\Win64\AGP-Win64-DebugGame.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -85,7 +85,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.2\Engine\Binaries\Win64\UnrealEditor.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\Ass\Ass34\Assignment34\AGP.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\UTS files\Advanced game\AGP\AGP.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -93,7 +93,7 @@
       <configuration_5>
         <option name="CONFIGURATION" value="Development" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass34\Assignment34\Binaries\Win64\AGP.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\AGP\Binaries\Win64\AGP.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -103,7 +103,7 @@
       <configuration_6>
         <option name="CONFIGURATION" value="Shipping" />
         <option name="PLATFORM" value="Win64" />
-        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\Ass\Ass34\Assignment34\Binaries\Win64\AGP-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\UTS files\Advanced game\AGP\Binaries\Win64\AGP-Win64-Shipping.exe" />
         <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.2" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
@@ -129,6 +129,9 @@
       <workItem from="1699027228910" duration="2625000" />
       <workItem from="1699068081111" duration="2113000" />
       <workItem from="1699251272962" duration="5165000" />
+      <workItem from="1699444883285" duration="5458000" />
+      <workItem from="1699450591556" duration="854000" />
+      <workItem from="1699535485444" duration="6985000" />
     </task>
     <servers />
   </component>
